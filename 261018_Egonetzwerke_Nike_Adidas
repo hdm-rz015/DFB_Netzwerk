@@ -115,8 +115,8 @@ plot(Nike[[1]],
      edge.color="grey80", # legt die Kantenfarbe fest
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(dfb)$weight, #legt die Kantenstärke fest
-     )
-     
+)
+
 
 # ----------------------------------------------------------------------
 
@@ -151,7 +151,7 @@ plot(Adidas[[1]],
 
 #---------------------------------------------------------------------------
 
-#DIREKTER VERGLEICH vom Ego-Netz Thomas Mueller und Mats Hummels
+#DIREKTER VERGLEICH vom Ego-Netz Nike und Adidas
 
 # direkter Vergleich der beiden Netzwerke herstellen
 
@@ -162,26 +162,26 @@ plot(Adidas[[1]], layout = layout_with_kk, main="Ego-Netzwerk Adidas")
 
 plot(Nike[[1]],
      layout = layout_with_kk, 
-     main="Ego-Netzwerk Thomas Mueller",
+     main="Ego-Netzwerk Nike",
      vertex.frame.color="black", 
      vertex.label.family = "Helvetica", 
      vertex.label.color = "grey25", 
      edge.color="grey80",
      edge.curved=.2,
      edge.width=E(soz)$weight,
-     )
+)
 
 
 plot(Adidas[[1]], 
      layout = layout_with_kk, 
-     main="Ego-Netzwerk Mats Hummels",
+     main="Ego-Netzwerk Adidas",
      vertex.frame.color="black", 
      vertex.label.family = "Helvetica", 
      vertex.label.color = "grey25", 
      edge.color="grey80",
      edge.curved=.2,
      edge.width=E(soz)$weight,
-     )
+)
 
 
 
