@@ -19,7 +19,7 @@ dfb <- graph_from_data_frame(d=hties, vertices=nodes, directed=F)
 dfb
 plot(dfb)
 
----------------------------------------------------------
+# ---------------------------------------------------------
   
   # EINFÄRBEN AUFGRUND VON VERTEXT ATTRIBUTEN
   
@@ -103,7 +103,7 @@ plot(dfb,
      main="Gesamtnetzwerk DFB")
 
 
-------------------------------------------------
+# ------------------------------------------------
 
 
 # EGO-NETZWERK der Werbepartner mit dem größten Zentralitätswert
