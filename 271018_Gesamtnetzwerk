@@ -20,9 +20,9 @@ dfb
 plot(dfb)
 
 ---------------------------------------------------------
-
+  
 # EINFÄRBEN AUFGRUND VON VERTEXT ATTRIBUTEN
-
+  
 # Im Netzwerk sind Spieler, Engagement und Werbekooperationen abgelegt, die über das Vertex.Attribut $type mit "1" (Spieler) oder "2" (Werbekooperationen) oder "3" (soziales Engagement) kodiert sind.
 vertex.attributes(dfb)$type
 
@@ -60,7 +60,7 @@ plot(dfb)
 
 # DAS NETZWERK WIRD ENTZERRT MIT DER VARIABLE
 
-coords <- layout_with_kk(dfb)*0.6
+coords <- layout_with_kk(dfb)*0.9
 
 
 # RELATIVE WERTE DURCH DIE GRÖßEN DER KNOTEN ABBILDEN
@@ -72,16 +72,33 @@ knotengroesse
 # plottet da Netzwerk und ändert die Größe des Knotens nach dem Degree-Wert
 par(mfrow=c(1,1)) 
 
+# VERTEX-ATTRIBUTE, die immer für das GESAMTE NETZWERK gelten
+
+# bestimmt die farbliche Umrandung der Knoten
+vertex.attributes(dfb)$frame.color
+V(dfb)$frame.color = "black"
+
+# legt die Schrift der Knotenbezeichnungen fest 
+vertex.attributes(dfb)$label.family
+V(dfb)$label.family = "Helvetica"
+
+# legt die Schriftfarbe der Knotenbezeichnungen fest
+vertex.attributes(dfb)$label.color
+V(dfb)$label.color = "grey25"
+
+
+# EDGE-ATTRIBUTE, die immer für das GESAMTE NETZWERK gelten
+
+# legt die Kantenfarbe fest
+edge.attributes(dfb)$edge.color
+V(dfb)$edge.color = "grey80"
+
+
 plot(dfb, 
      vertex.size=knotengroesse*4, # führt die relative Größe der Knoten aus
-     vertex.frame.color="black", # bestimmt die farbliche Umrandung der Knoten
-     vertex.label.family = "Helvetica", # legt die Schrift fest
-     vertex.label.color = "grey25", #legt die Schriftfarbe der Knotenbezeichnung fest
      layout=coords, # entzerrt das Netzwerk
-     rescale=FALSE, ylim=c(-2.5,3),xlim=c(-5,5), asp = 0, # legt die Fenstergröße fest nach x- und y-Varianten
-     edge.color="grey80", # legt die Kantenfarbe fest
+     rescale=FALSE, ylim=c(-2,5),xlim=c(-7,7), asp = 0, # legt die Fenstergröße fest nach x- und y-Varianten
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(dfb)$weight, #legt die Kantenstärke fest
      main="Gesamtnetzwerk DFB")
-
 
