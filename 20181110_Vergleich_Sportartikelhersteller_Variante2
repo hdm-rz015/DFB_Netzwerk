@@ -6,8 +6,8 @@
 
 library(igraph)
 # liest die Dateien direkt aus dem github-Verzeichnis ein
-el <- read.csv("https://raw.githubusercontent.com/kh107/hdm_NO1/master/Variante2.csv", header=T, as.is=T, sep = ",")
-nodes <- read.csv("https://raw.githubusercontent.com/kh107/hdm_NO1/master/Testversuch%20-%20Nodelist.csv", header=T, as.is=T, sep = ",")
+el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/20181110_Edgelist_einfach.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/271018_Nodelist.csv", header=T, as.is=T, sep = ",")
 
 # prüft, ob alle Variablen eingelesen wurden
 head(el)
