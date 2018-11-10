@@ -100,10 +100,10 @@ plot(dfb,
      rescale=FALSE, ylim=c(-2,5),xlim=c(-7,7), asp = 0, # legt die Fenstergröße fest nach x- und y-Varianten
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(dfb)$weight, #legt die Kantenstärke fest
-     main="Gesamtnetzwerk DFB"
+     main="Gesamtnetzwerk DFB")
      
+#Zuordnung der Vertex-Atrribute
      
-     #Zuordnung der Vertex-Atrribute
      name <- V(dfb)$akteursbezeichnung
      follower <- V(dfb)$follower
      marktwert <- V(dfb)$marktwert
