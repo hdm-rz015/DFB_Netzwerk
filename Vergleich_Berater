@@ -58,7 +58,7 @@ V(dfb)[spieler]$shape = "circle"
 # wöhlt alle Knoten aus, die das Vertex-Attribut "4" bei type gesetzt haben
 beratung <- V(dfb)[type == "4"]
 
-breatung
+beratung
 
 # weist allen Werten von spieler den Shape "cirle" zu
 V(dfb)[beratung]$shape = "circle"
