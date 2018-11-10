@@ -101,26 +101,30 @@ plot(dfb,
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(dfb)$weight, #legt die Kantenstärke fest
      main="Gesamtnetzwerk DFB")
-     
-#Zuordnung der Vertex-Atrribute
-     
-     name <- V(dfb)$akteursbezeichnung
-     follower <- V(dfb)$follower
-     marktwert <- V(dfb)$marktwert
-     alter <- V(dfb)$alter
-     berater <- V(dfb)$berater
-     nationalitaet <- V(dfb)$nationalitaet
-     type <- V(dfb)$type
-     ausstatter <- V(dfb)$ausstatter
-     
- 
-     marktwert
-     follower
-     alter
-     berater
-     nationalitaet
-     type
-     ausstatter
+
+
+
+
+
+#Zuordnung der Vertex-Attribute
+name <- V(dfb)$akteursbezeichnung
+follower <- V(dfb)$follower
+marktwert <- V(dfb)$marktwert
+alter <- V(dfb)$alter
+berater <- V(dfb)$berater
+nationalitaet <- V(dfb)$nationalitaet
+type <- V(dfb)$type
+ausstatter <- V(dfb)$ausstatter
+
+name 
+marktwert
+follower
+alter
+berater
+nationalitaet
+type
+ausstatter
+
      
 #VARIANTE 2: Anpassung der EDGELIST
 # anders als in Variante 1 selektieren wir nach der Edgelist, weil hier die Anpassung des Attributs inhaltlich logischer ist. Das Attribut "weight" wurde um die Zuordnung 4 ergänzt. Weight = 4 beschreibt die Ausstatterbeziehung. Diese waren vor der Änderung als weight=3 (dauerhafte Zusammenarbeit) gewichtet. 
