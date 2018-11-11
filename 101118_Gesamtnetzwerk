@@ -21,6 +21,10 @@ plot(dfb)
 
 # ---------------------------------------------------------
 
+
+# DIE BEZEICHNUNG DER AKTEURE anpassen 
+V(dfb)$label <- V(dfb)$akteursbezeichnung
+
 # EINFÄRBEN AUFGRUND VON VERTEXT ATTRIBUTEN
 
 # Im Netzwerk sind Spieler, Engagement und Werbekooperationen abgelegt, die über das Vertex.Attribut $type mit "1" (Spieler) oder "2" (Werbekooperationen) oder "3" (soziales Engagement) kodiert sind.
@@ -29,7 +33,7 @@ vertex.attributes(dfb)$type
 #Alle Spieler sollen nun mit der Farbe grün, alle Werbekooperationen mit der Farbe grau und soziales Engagement mit der Farbe blau visualisiert werden.
 
 #FARBEN nach Vertex-Attributen definieren
-faerbung <- c("green", "grey", "blue")
+faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
 
 #definiert das Farbspektrum, der verwendeten Farben und legt diese in einem neuen Vector faerbung fest. Da wir wissen, dass wir bei §Type nur drei Werte haben (Spieler, Werbekooperationen, soziales Engagement) brauchen wir auch drei Werte. Die direkten Farbpaletten sind hier hinterlegt: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf.
 
@@ -60,7 +64,7 @@ plot(dfb)
 
 # DAS NETZWERK WIRD ENTZERRT MIT DER VARIABLE
 
-coords <- layout_with_kk(dfb)*0.9
+coords <- layout_with_kk(dfb)*1.8
 
 
 # RELATIVE WERTE DURCH DIE GRÖßEN DER KNOTEN ABBILDEN
@@ -94,12 +98,13 @@ edge.attributes(dfb)$edge.color
 V(dfb)$edge.color = "grey80"
 
 
+
 plot(dfb, 
-     vertex.size=knotengroesse*4, # führt die relative Größe der Knoten aus
+     vertex.size=knotengroesse*5.5, # führt die relative Größe der Knoten aus
      layout=coords, # entzerrt das Netzwerk
-     rescale=FALSE, ylim=c(-4,5),xlim=c(-7,8), asp = 0, # legt die Fenstergröße fest nach x- und y-Varianten
+     rescale=FALSE, ylim=c(-7,10),xlim=c(-7,13), asp = 0, # legt die Fenstergröße fest nach x- und y-Varianten
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(dfb)$weight, #legt die Kantenstärke fest
-     main="Gesamtnetzwerk DFB")
-
+     main="Gesamtnetzwerk DFB"
+     )
 
