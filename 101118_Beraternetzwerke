@@ -20,21 +20,25 @@ dfb
 plot(dfb)
 
 # ---------------------------------------------------------
+# GESAMTNETZWERK
+
+# DIE BEZEICHNUNG DER AKTEURE anpassen 
+V(dfb)$label <- V(dfb)$akteursbezeichnung
 
 # EINFÄRBEN AUFGRUND VON VERTEXT ATTRIBUTEN
 
-# Im Netzwerk sind Spieler, Engagement und Werbekooperationen abgelegt, die über das Vertex.Attribut $type mit "1" (Spieler) oder "2" (Werbekooperationen) oder "3" (soziales Engagement) kodiert sind.
+# Im Netzwerk sind Spieler, Engagement, Werbekooperationen und Berater abgelegt, die über das Vertex.Attribut $type mit "1" (Spieler) oder "2" (Werbekooperationen) oder "3" (soziales Engagement) oder "4" (Berater) kodiert sind.
 vertex.attributes(dfb)$type
 
-#Alle Spieler sollen nun mit der Farbe grün, alle Werbekooperationen mit der Farbe grau und soziales Engagement mit der Farbe blau visualisiert werden.
+# Alle Akteure sollen nun in verschiedenen Farben visualisiert werden
 
 #FARBEN nach Vertex-Attributen definieren
-faerbung <- c("green", "grey", "blue", "yellow")
+faerbung <- c("chartreuse2", "honeydew3", "springgreen4", "gold")
 
-#definiert das Farbspektrum, der verwendeten Farben und legt diese in einem neuen Vector faerbung fest. Da wir wissen, dass wir bei §Type nur drei Werte haben (Spieler, Werbekooperationen, soziales Engagement) brauchen wir auch drei Werte. Die direkten Farbpaletten sind hier hinterlegt: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf.
+#definiert das Farbspektrum, der verwendeten Farben und legt diese in einem neuen Vector faerbung fest. Da wir wissen, dass wir bei $Type vier Werte haben (Spieler, Werbekooperationen, soziales Engagement, Berater) brauchen wir auch drei Werte. Die direkten Farbpaletten sind hier hinterlegt: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf.
 
 V(dfb)$color <- faerbung[V(dfb)$type]
-# weist dem Vertex-Attribut color die Funktion faerbung zu, die wir vorher mit drei Farben definiert haben.
+# weist dem Vertex-Attribut color die Funktion faerbung zu, die wir vorher mit vier Farben definiert haben.
 
 plot(dfb)
 
@@ -47,7 +51,7 @@ V(dfb)$shape = "square"
 
 plot(dfb)
 
-# wöhlt alle Knoten aus, die das Vertex-Attribut "1" bei type gesetzt haben
+# wählt alle Knoten aus, die das Vertex-Attribut "1" bei type gesetzt haben
 spieler <- V(dfb)[type == "1"]
 
 spieler
@@ -55,20 +59,13 @@ spieler
 # weist allen Werten von spieler den Shape "cirle" zu
 V(dfb)[spieler]$shape = "circle"
 
-# wöhlt alle Knoten aus, die das Vertex-Attribut "4" bei type gesetzt haben
-beratung <- V(dfb)[type == "4"]
-
-beratung
-
-# weist allen Werten von spieler den Shape "cirle" zu
-V(dfb)[beratung]$shape = "circle"
 
 plot(dfb)
 
 
 # DAS NETZWERK WIRD ENTZERRT MIT DER VARIABLE
 
-coords <- layout_with_kk(dfb)*0.9
+coords <- layout_with_kk(dfb)*1.8
 
 
 # RELATIVE WERTE DURCH DIE GRÖßEN DER KNOTEN ABBILDEN
@@ -102,17 +99,20 @@ edge.attributes(dfb)$edge.color
 V(dfb)$edge.color = "grey80"
 
 
+
 plot(dfb, 
-     vertex.size=knotengroesse*4, # führt die relative Größe der Knoten aus
+     vertex.size=knotengroesse*5.5, # führt die relative Größe der Knoten aus
      layout=coords, # entzerrt das Netzwerk
-     rescale=FALSE, ylim=c(-2,5),xlim=c(-7,7), asp = 0, # legt die Fenstergröße fest nach x- und y-Varianten
+     rescale=FALSE, ylim=c(-7,10),xlim=c(-13,13), asp = 0, # legt die Fenstergröße fest nach x- und y-Varianten
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(dfb)$weight, #legt die Kantenstärke fest
-     main="Gesamtnetzwerk DFB")
+     main="Gesamtnetzwerk DFB"
+)
 
 
+#------------------------------------------------
 
-
+# BERATERNETZWERKE
 
 #Zuordnung der Vertex-Attribute
 name <- V(dfb)$akteursbezeichnung
@@ -149,20 +149,24 @@ plot(berater1[[1]], main ="Spieler mit Berater 'Family and Football'")
 # BERATER 2: SportsTotal
 berater2 <- make_ego_graph(dfb, order = 2, nodes = V(dfb)$name == "SportsTotal_Berater", mode = "all")
 berater2
-plot(berater2[[1]], main ="Spieler mit Berater 'SportsTotal'")
+plot(berater2[[1]], main ="Spieler mit Berater 'SportsTotal'",
+     edge.curved=.2)
 
 # auffällig ist: Beide Spieler haben generell viele Kanten dh sowohl viele Werbekooperationen als auch mehrer soziale Beziehungen, die Spieler haben unterschiedliche Ausrüster
 
 # BERATER 3: fair_sport GmbH
 berater3 <- make_ego_graph(dfb, order = 2, nodes = V(dfb)$name == "fair_sport GmbH", mode = "all")
 berater3
-plot(berater3[[1]], main ="Spieler mit Berater 'fair_sport GmbH'")
+plot(berater3[[1]], main ="Spieler mit Berater 'fair_sport GmbH'",
+     edge.curved=.2)
 
 # auffällig ist: Beide Spieler haben denselben Ausrüster, einer des Spieler hat keine soziale Beziehung, beide Spieler haben wenige Werbekooperationen
 
 # BERATER 4:  Karlheinz Foerster
 berater4 <- make_ego_graph(dfb, order = 2, nodes = V(dfb)$name == "Karlheinz_Foerster", mode = "all")
 berater4
-plot(berater4[[1]], main ="Spieler mit Berater 'Karlheinz Foerster'")
+plot(berater4[[1]], main ="Spieler mit Berater 'Karlheinz Foerster'",
+     edge.curved=.2)
 
 # auffällig ist: Beide Spieler haben nur einen Ausrüster, aber keine sonstigen Werbekooperationen
+# Abgleich mit dem Marktwert gibt sicherlich weitere Aufschlüsse
