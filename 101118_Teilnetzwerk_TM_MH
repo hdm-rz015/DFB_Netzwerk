@@ -6,7 +6,7 @@
 
 library(igraph)
 # liest die Dateien direkt aus dem github-Verzeichnis ein
-el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/20181110_Edgelist_einfach.csv", header=T, as.is=T, sep = ",")
+el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/101118_Edgelist_einfach.csv", header=T, as.is=T, sep = ",")
 nodes <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/271018_Nodelist.csv", header=T, as.is=T, sep = ",")
 
 # prüft, ob alle Variablen eingelesen wurden
@@ -20,11 +20,11 @@ dfb
 plot(dfb)
 
 # ---------------------------------------------------------
-  
+
 # EINFÄRBEN AUFGRUND VON VERTEXT ATTRIBUTEN
-  
+
 # Im Netzwerk sind Spieler, Engagement und Werbekooperationen abgelegt, die über das Vertex.Attribut $type mit "1" (Spieler) oder "2" (Werbekooperationen) oder "3" (soziales Engagement) kodiert sind.
-  vertex.attributes(dfb)$type
+vertex.attributes(dfb)$type
 
 #Alle Spieler sollen nun mit der Farbe grün, alle Werbekooperationen mit der Farbe grau und soziales Engagement mit der Farbe blau visualisiert werden.
 
@@ -185,3 +185,4 @@ plot(MH[[1]],
      edge.curved=.2,
      edge.width=E(soz)$weight,
 )
+
