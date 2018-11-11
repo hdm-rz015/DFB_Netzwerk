@@ -6,7 +6,7 @@
 
 library(igraph)
 # liest die Dateien direkt aus dem github-Verzeichnis ein
-el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/271018_Edgelist.csv", header=T, as.is=T, sep = ",")
+el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/101118_Edgelist_einfach.csv", header=T, as.is=T, sep = ",")
 nodes <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/271018_Nodelist.csv", header=T, as.is=T, sep = ",")
 
 # prüft, ob alle Variablen eingelesen wurden
@@ -29,6 +29,7 @@ edge.attributes(dfb)
 edge.attributes(dfb)$relation
 # das edge attribut relationship ist in 1 (Soziales) und 2 (Werbekooperation) kodiert.
 
+
 #-----------------------------------------------------------------------------------------------
 
 # TEILNETZWERK SOZIALES ENGAGEMENT
@@ -37,21 +38,18 @@ soz <- subgraph.edges(dfb, E(dfb)[relationship == 1])
 soz
 edge.attributes(soz)$relation
 
-plot(soz, edge.arrow.size=0.1, 
-     main="Soziales Engagement")
 
 # EINFÄRBEN aufgrund von Vertex-Attributen
 
 # Im Netzwerk sind Spieler, Engagement und Werbekooperationen abgelegt, die über das Vertex.Attribut $type mit "1" (Spieler) oder "2" (Werbekooperationen) oder "3" (soziales Engagement) kodiert sind.
 vertex.attributes(soz)$type
 
-#Alle Spieler sollen nun mit der Farbe grün und soziales Engagement mit der Farbe blau visualisiert werden.
+#Alle Akteure sollen nun in verschiedenen Farben visualisiert werden.
 
 #FARBEN nach Vertex-Attributen definieren
-faerbung <- c("green", "grey", "blue")
+faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
 
 #definiert das Farbspektrum, der verwendeten Farben und legt diese in einem neuen Vector faerbung fest. Da wir wissen, dass wir bei §Type nur drei Werte haben (Spieler, Werbekooperationen, soziales Engagement) brauchen wir auch drei Werte. Die direkten Farbpaletten sind hier hinterlegt: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf.
-
 
 V(soz)$color <- faerbung[V(soz)$type]
 # weist dem Vertex-Attribut color die Funktion faerbung zu, die wir vorher mit drei Farben definiert haben.
@@ -71,11 +69,9 @@ spieler
 V(soz)[spieler]$shape = "circle"
 # weist allen Werten von spieler den Shape "cirle" zu.
 
-plot(soz)
-
 
 # Das Netzwerk wird entzerrt mit der Variable
-coords <- layout_with_kk(soz)*0.5
+coords <- layout_with_kk(soz)*0.6
 
 # Relative Werte durch die Größe der Knoten abbilden
 
@@ -86,9 +82,11 @@ knotengroesse
 # plottet da Netzwerk und ändert die Größe des Knotens nach dem Degree-Wert
 par(mfrow=c(1,1)) 
 
+# ändert die Bezeichnung der Akteure
+V(soz)$label <- V(soz)$akteursbezeichnung
 
 plot(soz, 
-     vertex.size=knotengroesse*3, # führt die relative Größe der Knoten aus
+     vertex.size=knotengroesse*4, # führt die relative Größe der Knoten aus
      vertex.frame.color="black", 
      vertex.label.family = "Helvetica", 
      vertex.label.color = "grey25", 
@@ -105,17 +103,32 @@ plot(soz,
 
 # DIE 5 SPIELER MIT DEM HÖCHSTEN DEGREE-WERT
 
-kw3 <- delete.edges(soz, which(E(soz)$weight == 3))
-plot(kw3)
+degree(soz)
+
+# die 5 Spieler mit dem höchsten Degree-Wert lassen sich aus der Liste ablesen
+# es sind 7 
+# der Spieler mit den meisten sozialen Degrees ist Thomas Müller
+
 
 
 V(soz)$degree <- degree(soz)
-soztop <- delete_vertices(soz, V(soz)[degree = "3"])
-plot(soztop)
+soztop <- delete_vertices(soz, V(soz)[degree <= "2"])
+soztop
+plot(soztop,
+     layout=layout_with_kk,
+     vertex.size=knotengroesse*7, # führt die relative Größe der Knoten aus
+     vertex.frame.color="black", 
+     vertex.label.family = "Helvetica", 
+     vertex.label.color = "grey25", 
+     edge.color="grey80",
+     edge.curved=.2,
+     )
 
-degree(soz)
+# interessant: 5 der 7 Spieler mit dem höchsten sozialen Engagement engagieren sich für United Charity
 
-# ..... muss hier weitergeführt werden
+
+
+
 
 # ------------------------------------------------------------------------------------------
 
@@ -125,21 +138,18 @@ werb <- subgraph.edges(dfb, E(dfb)[relationship == 2])
 werb
 edge.attributes(werb)$relation
 
-plot(werb, edge.arrow.size=0.1, 
-     main="Werbekooperationen")
 
 # EINFÄRBEN aufgrund von Vertex-Attributen
 
 # Im Netzwerk sind Spieler, Engagement und Werbekooperationen abgelegt, die über das Vertex.Attribut $type mit "1" (Spieler) oder "2" (Werbekooperationen) oder "3" (soziales Engagement) kodiert sind.
 vertex.attributes(werb)$type
 
-#Alle Spieler sollen nun mit der Farbe grün und soziales Engagement mit der Farbe blau visualisiert werden.
+#Alle Akteure sollen nun in verschiedenen Farben visualisiert werden.
 
 #FARBEN nach Vertex-Attributen definieren
-faerbung <- c("green", "grey", "blue")
+faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
 
 #definiert das Farbspektrum, der verwendeten Farben und legt diese in einem neuen Vector faerbung fest. Da wir wissen, dass wir bei §Type nur drei Werte haben (Spieler, Werbekooperationen, soziales Engagement) brauchen wir auch drei Werte. Die direkten Farbpaletten sind hier hinterlegt: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf.
-
 
 V(werb)$color <- faerbung[V(werb)$type]
 # weist dem Vertex-Attribut color die Funktion faerbung zu, die wir vorher mit drei Farben definiert haben.
@@ -174,6 +184,8 @@ knotengroesse
 # plottet da Netzwerk und ändert die Größe des Knotens nach dem Degree-Wert
 par(mfrow=c(1,1)) 
 
+# änder die Bezeichnung der Akteure
+V(werb)$label <- V(werb)$akteursbezeichnung
 
 plot(werb, 
      vertex.size=knotengroesse*3, # führt die relative Größe der Knoten aus
@@ -185,48 +197,64 @@ plot(werb,
      edge.curved=.2,
      edge.width=E(werb)$weight,
      rescale=FALSE, 
-     ylim=c(-1,3),
+     ylim=c(-1.5,3),
      xlim=c(-2.5,3), 
      asp = 0,
      main="Teilnetzwerk Werbekooperationen")
 
-#---------------------------------------------------------------------------------------------------------
 
-#DIREKTER VERGLEICH von zwei Netzwerken
+# DIE 5 SPIELER MIT DEM HÖCHSTEN DEGREE-WERT
+
+degree(werb)
+
+# die 5 Spieler mit dem höchsten Degree-Wert lassen sich aus der Liste ablesen
+# die Spieler mit den meisten Werbe-Degrees sind Thomas Müller, Manuel Neuer und Mats Hummels
+
+V(werb)$degree <- degree(werb)
+werbtop <- delete_vertices(werb, V(werb)[degree <= "4"])
+werbtop
+plot(werbtop,
+     layout=layout_with_kk,
+     vertex.size=knotengroesse*7, # führt die relative Größe der Knoten aus
+     vertex.frame.color="black", 
+     vertex.label.family = "Helvetica", 
+     vertex.label.color = "grey25", 
+     edge.color="grey80",
+     edge.curved=.2,
+)
+
+# interessant: Die 5 Spieler mit den meisten Werbekooperationen haben keine gemeinsame Werbekooperation
+
+
+# -----------------------------------------
+
+# FUNKTIONIERT NOCH NICHT:
+# Gegenüberstellung Top 7 soziales Engagement <--> Top 5 Werbekooperationen
 
 # direkter Vergleich der beiden Netzwerke herstellen
 
+
 par(mfrow=c(1,2), mar=c(0,0,2,0))
 
-plot(soz, 
-     layout = layout_with_kk, 
-     main="Teilnetzwerk Soziales Engagement",
-     vertex.size=knotengroesse*3, # führt die relative Größe der Knoten aus
-     vertex.frame.color="black", 
-     vertex.label.family = "Helvetica", 
-     vertex.label.color = "grey25", 
-     layout=coords, 
-     edge.color="grey80",
-     edge.curved=.2,
-     edge.width=E(soz)$weight,
-     ylim=c(-1,1),
-     xlim=c(-2,2), 
-     rescale=TRUE, 
-     asp = 0,)
+plot(soztop[[1]], 
+     layout=layout_with_kk,
+     main="Top 7 Werbekooperationen",
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(soztop)$weight, #legt die Kantenstärke fest
+)
 
 
-plot(werb, 
-     layout = layout_with_kk, 
-     main="Teilnetzwerk Werbekooperationen",
-     vertex.size=knotengroesse*3, # führt die relative Größe der Knoten aus
-     vertex.frame.color="black", 
-     vertex.label.family = "Helvetica", 
-     vertex.label.color = "grey25", 
-     layout=coords, 
-     edge.color="grey80",
-     edge.curved=.2,
-     edge.width=E(werb)$weight,
-     ylim=c(-1,1),
-     xlim=c(-2,2), 
-     rescale=TRUE, 
-     asp = 0,)
+plot(werbtop[[1]], 
+     layout=layout_with_kk,
+     main="Top 5 Werbekooperationen",
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(werbtop)$weight, #legt die Kantenstärke fest
+)
+
+# Wieso kann man diese 2 Teilnetzwerke nicht nebeneinander stellen? Man kann die Daten zwar dennoch vergleiche, aber nebeineinader wäre schöner
+
+#-----------------------
+
+# INTERESSANT: Marco Reus, Thomas Müller und Jerome Boateng kommen in beiden Top-Netzwerken vor
+# so haben 3 von 5 Spielern mit den meisten Werbekooperationen auch die meisten sozialen Engagements
+# Thomas Mueller ist in beiden Netzwerken auf Platz 1
