@@ -102,3 +102,4 @@ plot(dfb,
      edge.width=E(dfb)$weight, #legt die Kantenstärke fest
      main="Gesamtnetzwerk DFB")
 
+
