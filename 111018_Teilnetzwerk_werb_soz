@@ -1,19 +1,15 @@
-# Edge- und Nodelist koppeln
+# TEILNETZWERKE WERBEKOOPERATIONEN UND SOZIALES ENGAGEMENT 
 
-# Gesamtnetzwerk dfb 
-
-# IGRAPH-OBJEKT
+# IGRAPH-OBJEKT GESAMTNETZWERK DFB
 
 library(igraph)
-# liest die Dateien direkt aus dem github-Verzeichnis ein
+
 el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/101118_Edgelist_einfach.csv", header=T, as.is=T, sep = ",")
 nodes <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/271018_Nodelist.csv", header=T, as.is=T, sep = ",")
 
-# prüft, ob alle Variablen eingelesen wurden
 head(el)
 head(nodes)
 
-# wandelt die edgelist in eine Matrix um und baut das igraph-Objekt
 hties <-as.matrix(el)
 dfb <- graph_from_data_frame(d=hties, vertices=nodes, directed=F)
 dfb
@@ -21,13 +17,13 @@ plot(dfb)
 
 #----------------------------------------------------------------------------------------------
 
-# SELEKTION und VERGLEICH von zwei Teilnetzwerken
-# wir wollen Soziales Engagement (soz) mit Werbekooperationen (werb) vergleichen. Deshalb müssen wir das Netzwerk erst noch in zwei separate Netzwerke aufteilen:
+# SELEKTION VON ZWEI TEILNETZWERKEN
+# Das Teilnetzwerk soziales Engagement (soz) wird mit dem Teilnetzwerk Werbekooperationen (werb) verglichen. 
 
 # Selektion in Teilnetzwerk soz und werb
 edge.attributes(dfb)
-edge.attributes(dfb)$relation
-# das edge attribut relationship ist in 1 (Soziales) und 2 (Werbekooperation) kodiert.
+edge.attributes(dfb)$relationship
+# das Edge-Attribut relationship ist in "1" (soziales Engagement) und "2" (Werbekooperationen) kodiert.
 
 #-----------------------------------------------------------------------------------------------
 
@@ -35,67 +31,77 @@ edge.attributes(dfb)$relation
 
 soz <- subgraph.edges(dfb, E(dfb)[relationship == 1])
 soz
-edge.attributes(soz)$relation
+edge.attributes(soz)$relationship
 
+# Visualisierung des Teilnetzwerks soz
 
-# EINFÄRBEN aufgrund von Vertex-Attributen
+# Die Beschriftung der Knoten (Label) entspricht dem Attribut "Akteursbezeichnungen".
+V(soz)$label <- V(soz)$akteursbezeichnung
 
-# Im Netzwerk sind Spieler, Engagement und Werbekooperationen abgelegt, die über das Vertex.Attribut $type mit "1" (Spieler) oder "2" (Werbekooperationen) oder "3" (soziales Engagement) kodiert sind.
+# Färbung der Knoten
+# Im Teilnetzwerk werden die Spieler und ihr soziales Engagement dargestellt.
+# Das Vertex-Attribut $type definiert mit "1" die Spieler und mit "3" das soziale Engagement.
 vertex.attributes(soz)$type
 
-#Alle Akteure sollen nun in verschiedenen Farben visualisiert werden.
-
-#FARBEN nach Vertex-Attributen definieren
+# Färbung der Knoten
+# Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
+# Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
+# Da das Attribut $type drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
 faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
 
-#definiert das Farbspektrum, der verwendeten Farben und legt diese in einem neuen Vector faerbung fest. Da wir wissen, dass wir bei §Type nur drei Werte haben (Spieler, Werbekooperationen, soziales Engagement) brauchen wir auch drei Werte. Die direkten Farbpaletten sind hier hinterlegt: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf.
-
+# Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
 V(soz)$color <- faerbung[V(soz)$type]
-# weist dem Vertex-Attribut color die Funktion faerbung zu, die wir vorher mit drei Farben definiert haben.
+
+# Form der Akteure bestimmen
+# definiert, dass alle Knoten als square auftreten.
+V(soz)$shape = "square"
+
+# wählt alle Knoten aus, die das Vertex-Attribut "1" bei $type gesetzt haben.
+spieler <- V(soz)[type == "1"]
+spieler
+
+# weist allen Werten von "spieler" den shape "cirle" zu.
+V(soz)[spieler]$shape = "circle"
 
 plot(soz)
 
-# FORM DER AKTEURE ANPASSEN
-
-V(soz)$shape = "square"
-# definiert, dass alle Knoten als square auftreten
-
-spieler <- V(soz)[type == "1"]
-# wöhlt alle Knoten aus, die das Vertex-Attribut "1" bei type gesetzt haben
-
-spieler
-
-V(soz)[spieler]$shape = "circle"
-# weist allen Werten von spieler den Shape "cirle" zu.
 
 
-# Das Netzwerk wird entzerrt mit der Variable
-coords <- layout_with_kk(soz)*0.6
 
-# Relative Werte durch die Größe der Knoten abbilden
+# Das Teilnetzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
+coords <- layout_with_fr(soz)*1
 
-# berechnet den Degree-Wert für alle Knoten und weist ihm die Variable "knotengroesse" zu.
+# Festlegung der relativen Knotengröße
+# berechnet die Degree-Werte für alle Knoten und weist diese der Variable "knotengroesse" zu.
 knotengroesse <- degree(soz)
 knotengroesse
 
-# plottet da Netzwerk und ändert die Größe des Knotens nach dem Degree-Wert
-par(mfrow=c(1,1)) 
+# bestimmt die farbliche Umrandung der Knoten
+vertex.attributes(soz)$frame.color
+V(soz)$frame.color = "gray45"
+
+# legt die Schrift der Knotenbezeichnungen fest 
+vertex.attributes(soz)$label.family
+V(soz)$label.family = "Helvetica"
+
+# legt die Schriftfarbe der Knotenbezeichnungen fest
+vertex.attributes(soz)$label.color
+V(soz)$label.color = "gray20"
+
+# legt die Kantenfarbe fest
+edge.attributes(soz)$edge.color
+E(soz)$color = "gray30"
+
 
 
 plot(soz, 
-     vertex.size=knotengroesse*4, # führt die relative Größe der Knoten aus
-     vertex.frame.color="black", 
-     vertex.label.family = "Helvetica", 
-     vertex.label.color = "grey25", 
-     layout=coords, 
-     edge.color="grey80",
-     edge.curved=.2,
-     edge.width=E(soz)$weight,
-     rescale=FALSE, 
-     ylim=c(-3,3),
-     xlim=c(-4,4), 
-     asp = 0,
-     main="Teilnetzwerk Soziales Engagement")
+     vertex.size=knotengroesse*6, # führt die relative Größe der Knoten aus
+     layout=coords, # entzerrt das Netzwerk
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(soz)$weight, # legt die Kantenstärke fest
+     rescale=FALSE, ylim=c(-2,10), xlim=c(-3,18), asp = 0, # legt die Fenstergröße fest 
+     main="Teilnetzwerk Soziales Engagement") # Überschrift des Netzwerks
+
 
 
 
@@ -107,108 +113,104 @@ plot(soz,
 
 werb <- subgraph.edges(dfb, E(dfb)[relationship == 2])
 werb
-edge.attributes(werb)$relation
+edge.attributes(werb)$relationship
 
+# Visualisierung des Teilnetzwerks werb
 
-# EINFÄRBEN aufgrund von Vertex-Attributen
+# Die Beschriftung der Knoten (Label) entspricht dem Attribut "Akteursbezeichnungen".
+V(werb)$label <- V(werb)$akteursbezeichnung
 
-# Im Netzwerk sind Spieler, Engagement und Werbekooperationen abgelegt, die über das Vertex.Attribut $type mit "1" (Spieler) oder "2" (Werbekooperationen) oder "3" (soziales Engagement) kodiert sind.
+# Färbung der Knoten
+# Im Teilnetzwerk werden die Spieler und ihre Werbekooperationen dargestellt.
+# Das Vertex-Attribut $type definiert mit "1" die Spieler und mit "2" die Werbekooperationen.
 vertex.attributes(werb)$type
 
-#Alle Akteure sollen nun in verschiedenen Farben visualisiert werden.
-
-#FARBEN nach Vertex-Attributen definieren
+# Färbung der Knoten
+# Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
+# Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
+# Da das Attribut $type drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
 faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
 
-#definiert das Farbspektrum, der verwendeten Farben und legt diese in einem neuen Vector faerbung fest. Da wir wissen, dass wir bei §Type nur drei Werte haben (Spieler, Werbekooperationen, soziales Engagement) brauchen wir auch drei Werte. Die direkten Farbpaletten sind hier hinterlegt: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf.
-
+# Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
 V(werb)$color <- faerbung[V(werb)$type]
-# weist dem Vertex-Attribut color die Funktion faerbung zu, die wir vorher mit drei Farben definiert haben.
 
-plot(werb)
-
-# FORM DER AKTEURE ANPASSEN
-
+# Form der Akteure bestimmen
+# definiert, dass alle Knoten als square auftreten.
 V(werb)$shape = "square"
-# definiert, dass alle Knoten als square auftreten
 
+# wählt alle Knoten aus, die das Vertex-Attribut "1" bei $type gesetzt haben.
 spieler <- V(werb)[type == "1"]
-# wöhlt alle Knoten aus, die das Vertex-Attribut "1" bei type gesetzt haben
-
 spieler
 
+# weist allen Werten von "spieler" den shape "cirle" zu.
 V(werb)[spieler]$shape = "circle"
-# weist allen Werten von spieler den Shape "cirle" zu.
 
 plot(werb)
 
 
-# Das Netzwerk wird entzerrt mit der Variable
-coords <- layout_with_kk(werb)*0.5
 
-# Relative Werte durch die Größe der Knoten abbilden
 
-# berechnet den Degree-Wert für alle Knoten und weist ihm die Variable "knotengroesse" zu.
+# Das Teilnetzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
+coords <- layout_with_fr(werb)*0.9
+
+# Festlegung der relativen Knotengröße
+# berechnet die Degree-Werte für alle Knoten und weist diese der Variable "knotengroesse" zu.
 knotengroesse <- degree(werb)
 knotengroesse
 
-# plottet da Netzwerk und ändert die Größe des Knotens nach dem Degree-Wert
-par(mfrow=c(1,1)) 
+# bestimmt die farbliche Umrandung der Knoten
+vertex.attributes(werb)$frame.color
+V(werb)$frame.color = "gray45"
+
+# legt die Schrift der Knotenbezeichnungen fest 
+vertex.attributes(werb)$label.family
+V(werb)$label.family = "Helvetica"
+
+# legt die Schriftfarbe der Knotenbezeichnungen fest
+vertex.attributes(werb)$label.color
+V(werb)$label.color = "gray20"
+
+# legt die Kantenfarbe fest
+edge.attributes(werb)$edge.color
+E(werb)$color = "gray30"
+
 
 
 plot(werb, 
-     vertex.size=knotengroesse*3, # führt die relative Größe der Knoten aus
-     vertex.frame.color="black", 
-     vertex.label.family = "Helvetica", 
-     vertex.label.color = "grey25", 
-     layout=coords, 
-     edge.color="grey80",
-     edge.curved=.2,
-     edge.width=E(werb)$weight,
-     rescale=FALSE, 
-     ylim=c(-1.5,3),
-     xlim=c(-2.5,3), 
-     asp = 0,
-     main="Teilnetzwerk Werbekooperationen")
+     vertex.size=knotengroesse*6, # führt die relative Größe der Knoten aus
+     layout=coords, # entzerrt das Netzwerk
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(werb)$weight, # legt die Kantenstärke fest
+     rescale=FALSE, ylim=c(-5,10), xlim=c(-10,10), asp = 0, # legt die Fenstergröße fest 
+     main="Teilnetzwerk Werbekooperationen") # Überschrift des Netzwerks
 
-#---------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------
 
-#DIREKTER VERGLEICH von zwei Netzwerken
+# DIREKTER VERGLEICH DER BEIDEN TEILNETZWERKE SOZ UND WERB
 
-# direkter Vergleich der beiden Netzwerke herstellen
-
-par(mfrow=c(1,2), mar=c(0,0,2,0))
+par(mfrow=c(1,2), mar=c(4,2,2,2))
 
 plot(soz, 
-     layout = layout_with_kk, 
+     layout = coords, 
      main="Teilnetzwerk Soziales Engagement",
-     vertex.size=knotengroesse*3, # führt die relative Größe der Knoten aus
-     vertex.frame.color="black", 
+     vertex.size=knotengroesse*1, 
+     vertex.frame.color="gray45", 
      vertex.label.family = "Helvetica", 
-     vertex.label.color = "grey25", 
-     layout=coords, 
-     edge.color="grey80",
-     edge.curved=.2,
+     vertex.label.color = "gray20", 
+     edge.color="gray30",
+     edge.curved=0.2,
      edge.width=E(soz)$weight,
-     ylim=c(-1,1),
-     xlim=c(-2,2), 
-     rescale=TRUE, 
-     asp = 0)
+     )
 
 
 plot(werb, 
-     layout = layout_with_kk, 
+     layout = coords, 
      main="Teilnetzwerk Werbekooperationen",
-     vertex.size=knotengroesse*3, # führt die relative Größe der Knoten aus
-     vertex.frame.color="black", 
+     vertex.size=knotengroesse*1, 
+     vertex.frame.color="gray45", 
      vertex.label.family = "Helvetica", 
-     vertex.label.color = "grey25", 
-     layout=coords, 
-     edge.color="grey80",
-     edge.curved=.2,
+     vertex.label.color = "gray20", 
+     edge.color="gray30",
+     edge.curved=0.2,
      edge.width=E(werb)$weight,
-     ylim=c(-1,1),
-     xlim=c(-2,2), 
-     rescale=TRUE, 
-     asp = 0)
-
+     )
