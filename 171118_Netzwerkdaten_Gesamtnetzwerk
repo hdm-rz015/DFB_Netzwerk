@@ -1,0 +1,142 @@
+# ANALYSIERUNG DER NETZWERKDATEN IM GESAMTNETZWERK DFB
+
+# IGRAPH-OBJEKT
+
+library(igraph)
+
+el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/101118_Edgelist_einfach.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/271018_Nodelist.csv", header=T, as.is=T, sep = ",")
+
+head(el)
+head(nodes)
+
+hties <-as.matrix(el)
+dfb <- graph_from_data_frame(d=hties, vertices=nodes, directed=F)
+dfb
+plot(dfb)
+
+# ---------------------------------------------------------
+
+# VISUALISIERUNG DES GESAMTNETZWERKS DFB
+
+# Die Beschriftung der Knoten (Label) entspricht dem Attribut "Akteursbezeichnungen".
+V(dfb)$label <- V(dfb)$akteursbezeichnung
+
+# Im Netzwerk werden die Spieler selbst, ihre Werbekooperationen und ihr soziales Engagement dargestellt.
+# Das Vertex-Attribut $type definiert mit "1" die Spieler, mit "2" die Werbekooperationen und mit "3" das soziale Engagement.
+vertex.attributes(dfb)$type
+
+# Färbung der Knoten
+# Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
+# Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
+# Da das Attribut $type nur drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
+faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
+
+# Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
+V(dfb)$color <- faerbung[V(dfb)$type]
+
+# Form der Akteure bestimmen
+# definiert, dass alle Knoten als square auftreten.
+V(dfb)$shape = "square"
+
+# wählt alle Knoten aus, die das Vertex-Attribut "1" bei $type gesetzt haben.
+spieler <- V(dfb)[type == "1"]
+spieler
+
+# weist allen Werten von "spieler" den shape "cirle" zu.
+V(dfb)[spieler]$shape = "circle"
+
+plot(dfb)
+
+
+
+
+# Das Netzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
+coords <- layout_with_fr(dfb)*1.2
+
+# Festlegung der relativen Knotengröße
+# berechnet die Degree-Werte für alle Knoten und weist diese der Variable "knotengroesse" zu.
+knotengroesse <- degree(dfb)
+knotengroesse
+
+# bestimmt die farbliche Umrandung der Knoten
+vertex.attributes(dfb)$frame.color
+V(dfb)$frame.color = "gray45"
+
+# legt die Schrift der Knotenbezeichnungen fest 
+vertex.attributes(dfb)$label.family
+V(dfb)$label.family = "Helvetica"
+
+# legt die Schriftfarbe der Knotenbezeichnungen fest
+vertex.attributes(dfb)$label.color
+V(dfb)$label.color = "gray20"
+
+# legt die Kantenfarbe fest
+edge.attributes(dfb)$edge.color
+E(dfb)$color = "gray30"
+
+# ---------------------------------------------------------
+
+
+plot(dfb, 
+     vertex.size=knotengroesse*7, # führt die relative Größe der Knoten aus
+     layout=coords, # entzerrt das Netzwerk
+     rescale=FALSE, ylim=c(-5,15),xlim=c(-15,15), asp = 0, # legt die Fenstergröße fest 
+     edge.curved=0.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(dfb)$weight, # legt die Kantenstärke fest
+     main="Gesamtnetzwerk DFB" # Überschrift des Netzwerks
+)
+
+# ---------------------------------------------------------
+
+# ANALYSIERUNG DER NETZWERKDATEN IM GESAMTNETZWERK DFB
+
+# NETZWERKMAßE
+
+# Wie viele Knoten gibt es?
+vcount(dfb)
+# Anzahl der vertices: 102
+
+# Wie viele Kanten gibt es?
+ecount(dfb)
+# Anzahl der edges: 120
+
+# Dichte des Netzwerks (Anzahl der realisierten Beziehungen zwischen Knoten im Verhältnis zu allen möglichen Verbindungen)
+edge_density(dfb)
+# Die Dichte des Netzwerks beträgt 2,33%.
+# Das heißt es wurden von allen möglichen Beziehungen zwischen den Knoten nur 2,33% realisiert.
+
+
+
+# AKTEURSMAßE
+
+# Wer ist am stärksten im Netzwerk vernetzt? (allgemeiner Degree-Wert)
+degree(dfb)
+# Thomas Mueller ist der Akteur, der am stärksten im Netzwerk vernetzt ist. Er hat 15 degrees.
+
+# Der Degree-Wert wird normalisiert. Alle Werte werden auf prozentuale Werte zwischen 0 und 1 umgerechnet.
+degree(dfb, mode="all", normalized=TRUE)
+# Der Degree-Wert von Thomas Mueller entspricht 14,84%
+
+
+# ZENTRALITÄTSMAßE
+
+# zentralisierter Degree-Wert
+centr_degree(dfb)$centralization
+# 0.1252184
+
+# zentralisierter Closeness-Wert
+centr_clo(dfb)$centralization
+# 0.2238287
+
+# zentralisierter Betweenness-Wert
+centr_betw(dfb)$centralization
+# 0.397172
+
+# zentralisierter Eigenvector-Wert
+centr_eigen(dfb)$centralization
+# 0.8592874
+
+# Betweenness (Maß für die Brokerage von Knoten im Netzwerk)
+betweenness(dfb)
+edge_betweenness(dfb)
