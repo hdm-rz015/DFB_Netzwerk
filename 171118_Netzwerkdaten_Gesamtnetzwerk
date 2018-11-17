@@ -104,7 +104,7 @@ ecount(dfb)
 # Dichte des Netzwerks (Anzahl der realisierten Beziehungen zwischen Knoten im Verhältnis zu allen möglichen Verbindungen)
 edge_density(dfb)
 # Die Dichte des Netzwerks beträgt 2,33%.
-# Das heißt es wurden von allen möglichen Beziehungen zwischen den Knoten nur 2,33% realisiert.
+# Das heißt, es wurden von allen möglichen Beziehungen zwischen den Knoten nur 2,33% realisiert.
 
 
 
@@ -139,4 +139,7 @@ centr_eigen(dfb)$centralization
 
 # Betweenness (Maß für die Brokerage von Knoten im Netzwerk)
 betweenness(dfb)
+# Mats Hummels hat den höchsten Betweenness-Wert: 1384.7
+
+# Edge-Betweenness
 edge_betweenness(dfb)
