@@ -23,7 +23,7 @@ plot(dfb)
 # Selektion in Teilnetzwerk soz und werb
 edge.attributes(dfb)
 edge.attributes(dfb)$relationship
-# das Edge-Attribut relationship ist in "1" (Soziales) und "2" (Werbekooperationen) kodiert.
+# das Edge-Attribut relationship ist in "1" (soziales Engagement) und "2" (Werbekooperationen) kodiert.
 
 #-----------------------------------------------------------------------------------------------
 
@@ -263,4 +263,3 @@ plot(werbtop,
 # INTERESSANT: Marco Reus, Thomas Müller und Jerome Boateng kommen in beiden Top-Netzwerken vor
 # so haben 3 von 5 Spielern mit den meisten Werbekooperationen auch das meiste sozialen Engagement
 # Thomas Mueller ist in beiden Netzwerken auf Platz 1
-
