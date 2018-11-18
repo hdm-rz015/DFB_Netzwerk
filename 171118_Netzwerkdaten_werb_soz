@@ -1,4 +1,4 @@
-# TEILNETZWERKE WERBEKOOPERATIONEN UND SOZIALES ENGAGEMENT 
+# TEILNETZWERKE WERBEKOOPERATIONEN UND SOZIALES ENGAGEMENT UND DEREN NETZWERKDATEN
 
 # IGRAPH-OBJEKT GESAMTNETZWERK DFB
 
@@ -107,6 +107,7 @@ plot(soz,
 
 # ANALYSIERUNG DER NETZWERKDATEN IM TEILNETZWERK SOZ
 
+
 # NETZWERKMAßE
 
 # Wie viele Knoten gibt es?
@@ -122,6 +123,27 @@ edge_density(soz)
 # Die Dichte des Netzwerks beträgt 3,00%.
 # Das heißt, es wurden von allen möglichen Beziehungen zwischen den Knoten nur 3,00% realisiert.
 
+# Der Durchmesser des Netzwerks (maximal mögliche Pfaddistanz)
+diameter(soz)
+# Die maximale Pfaddistanz beträgt 19
+
+# Welche Knoten sind von der maximalen Pfaddistanz betroffen? 
+farthest_vertices(soz)
+# Mit den Knoten "Living a dream" und der "Toni Kroos Stiftung" können wir sozusagen die maximale Pfaddistanz laufen.
+
+# Durchschnittliche Pfaddistanz
+mean_distance(soz)
+# Die durchschnittliche Pfaddistanz beträgt 3.52
+
+# Ist es ein ganzes Netzwerk oder gibt es Teile (Komponenten)?
+is_connected(soz)
+# False: Das Netzwerk soz ist kein ganzes Netzwerk 
+
+# Cluster im Netzwerk
+cluster_walktrap(soz)
+cluster <- cluster_walktrap(soz)
+plot(cluster, soz)
+
 
 
 # AKTEURSMAßE
@@ -133,9 +155,6 @@ degree(soz)
 # Der Degree-Wert wird normalisiert. Alle Werte werden auf prozentuale Werte zwischen 0 und 1 umgerechnet.
 degree(soz, mode="all", normalized=TRUE)
 # Die Degree-Werte von Thomas Mueller und United-Charity entsprechen jeweils 11,32%
-
-
-# ZENTRALITÄTSMAßE
 
 # zentralisierter Degree-Wert
 centr_degree(soz)$centralization
@@ -245,6 +264,7 @@ plot(werb,
 
 # ANALYSIERUNG DER NETZWERKDATEN IM TEILNETZWERK WERB
 
+
 # NETZWERKMAßE
 
 # Wie viele Knoten gibt es?
@@ -260,6 +280,27 @@ edge_density(werb)
 # Die Dichte des Netzwerks beträgt 3,38%.
 # Das heißt, es wurden von allen möglichen Beziehungen zwischen den Knoten nur 3,38% realisiert.
 
+# Der Durchmesser des Netzwerks (maximal mögliche Pfaddistanz)
+diameter(werb)
+# Die maximale Pfaddistanz beträgt 22
+
+# Welche Knoten sind von der maximalen Pfaddistanz betroffen? 
+farthest_vertices(werb)
+# Mit den Knoten "Barilla" und "Jamie Jacobs" können wir sozusagen die maximale Pfaddistanz laufen.
+
+# Durchschnittliche Pfaddistanz
+mean_distance(werb)
+# Die durchschnittliche Pfaddistanz beträgt 4.18
+
+# Ist es ein ganzes Netzwerk oder gibt es Teile (Komponenten)?
+is_connected(werb)
+# TRUE: Das Netzwerk werb ist ein ganzes Netzwerk 
+
+# Cluster im Netzwerk
+cluster_walktrap(werb)
+cluster <- cluster_walktrap(werb)
+plot(cluster, werb)
+
 
 
 # AKTEURSMAßE
@@ -271,9 +312,6 @@ degree(werb)
 # Der Degree-Wert wird normalisiert. Alle Werte werden auf prozentuale Werte zwischen 0 und 1 umgerechnet.
 degree(werb, mode="all", normalized=TRUE)
 # Die Degree-Werte von Adidas und Nike entsprechen jeweils 16,42%
-
-
-# ZENTRALITÄTSMAßE
 
 # zentralisierter Degree-Wert
 centr_degree(werb)$centralization
@@ -293,3 +331,4 @@ betweenness(werb)
 
 # Edge-Betweennes
 edge_betweenness(werb)
+
