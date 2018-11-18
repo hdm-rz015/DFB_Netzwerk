@@ -128,6 +128,14 @@ cluster_walktrap(dfb)
 cluster <- cluster_walktrap(dfb)
 plot(cluster, dfb)
 
+# Cliquen im Netzwerk 
+cliques(dfb, min="1", max="4")
+
+# Die „largest Clique“ beinhaltet die meisten Knoten 
+largest_cliques(dfb)
+# Die "largest Clique" besteht aus 2 Knoten
+
+
 
 
 # AKTEURSMAßE
