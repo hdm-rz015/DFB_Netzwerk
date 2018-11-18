@@ -91,6 +91,7 @@ plot(dfb,
 
 # ANALYSIERUNG DER NETZWERKDATEN IM GESAMTNETZWERK DFB
 
+
 # NETZWERKMAßE
 
 # Wie viele Knoten gibt es?
@@ -106,6 +107,27 @@ edge_density(dfb)
 # Die Dichte des Netzwerks beträgt 2,33%.
 # Das heißt, es wurden von allen möglichen Beziehungen zwischen den Knoten nur 2,33% realisiert.
 
+# Der Durchmesser des Netzwerks (maximal mögliche Pfaddistanz)
+diameter(dfb)
+# Die maximale Pfaddistanz beträgt 24.
+
+# Welche Knoten sind von der maximalen Pfaddistanz betroffen? 
+farthest_vertices(dfb)
+# Mit den Knoten "Jugendhilfe Jona" und der "Matthias Ginter Stiftung" können wir sozusagen die maximale Pfaddistanz laufen.
+
+# Durchschnittliche Pfaddistanz
+mean_distance(dfb)
+# Die durchschnittliche Pfaddistanz beträgt 4.19
+
+# Ist es ein ganzes Netzwerk oder gibt es Teile (Komponenten)?
+is_connected(dfb)
+# TRUE: Das Netzwerk dfb ist ein ganzes Netzwerk 
+
+# Cluster im Netzwerk
+cluster_walktrap(dfb)
+cluster <- cluster_walktrap(dfb)
+plot(cluster, dfb)
+
 
 
 # AKTEURSMAßE
@@ -117,9 +139,6 @@ degree(dfb)
 # Der Degree-Wert wird normalisiert. Alle Werte werden auf prozentuale Werte zwischen 0 und 1 umgerechnet.
 degree(dfb, mode="all", normalized=TRUE)
 # Der Degree-Wert von Thomas Mueller entspricht 14,84%
-
-
-# ZENTRALITÄTSMAßE
 
 # zentralisierter Degree-Wert
 centr_degree(dfb)$centralization
