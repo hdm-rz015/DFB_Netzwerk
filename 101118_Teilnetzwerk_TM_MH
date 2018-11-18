@@ -145,12 +145,12 @@ plot(TM[[1]],
      layout = layout_with_fr, 
      main="Ego-Netzwerk Thomas Mueller",
      edge.curved=.2,
-     edge.width=E(soz)$weight,
+     edge.width=E(dfb)$weight,
 )
 
 plot(MH[[1]], 
      layout = layout_with_fr, 
      main="Ego-Netzwerk Mats Hummels",
      edge.curved=.2,
-     edge.width=E(soz)$weight,
+     edge.width=E(dfb)$weight,
 )
