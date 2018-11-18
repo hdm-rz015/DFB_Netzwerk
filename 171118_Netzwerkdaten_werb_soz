@@ -144,6 +144,13 @@ cluster_walktrap(soz)
 cluster <- cluster_walktrap(soz)
 plot(cluster, soz)
 
+# Cliquen im Netzwerk 
+cliques(soz, min="1", max="4")
+
+# Die „largest Clique“ beinhaltet die meisten Knoten 
+largest_cliques(soz)
+# Die "largest Clique" besteht aus 2 Knoten
+
 
 
 # AKTEURSMAßE
@@ -301,6 +308,14 @@ cluster_walktrap(werb)
 cluster <- cluster_walktrap(werb)
 plot(cluster, werb)
 
+# Cliquen im Netzwerk 
+cliques(werb, min="1", max="4")
+
+# Die „largest Clique“ beinhaltet die meisten Knoten 
+largest_cliques(werb)
+# Die "largest Clique" besteht aus 2 Knoten
+
+
 
 
 # AKTEURSMAßE
@@ -331,4 +346,3 @@ betweenness(werb)
 
 # Edge-Betweennes
 edge_betweenness(werb)
-
