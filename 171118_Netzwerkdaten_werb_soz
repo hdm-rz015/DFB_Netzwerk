@@ -142,7 +142,7 @@ is_connected(soz)
 # Cluster im Netzwerk
 cluster_walktrap(soz)
 cluster <- cluster_walktrap(soz)
-plot(cluster, soz)
+plot(cluster, soz, main="Cluster Teilnetzwerk soziales Engagement")
 
 # Cliquen im Netzwerk 
 cliques(soz, min="1", max="4")
@@ -306,7 +306,7 @@ is_connected(werb)
 # Cluster im Netzwerk
 cluster_walktrap(werb)
 cluster <- cluster_walktrap(werb)
-plot(cluster, werb)
+plot(cluster, werb, main="Cluster Teilnetzwerk Werbekooperationen")
 
 # Cliquen im Netzwerk 
 cliques(werb, min="1", max="4")
