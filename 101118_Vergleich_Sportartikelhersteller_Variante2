@@ -131,7 +131,7 @@ ausstatter
 
 sport <- subgraph.edges(dfb, E(dfb)[weight == "4"])
 sport
-plot(sport, main="Vergleich Sportartikel-Ausstatter")
+plot(sport, main="Vergleich der Ausruester")
 
 # Man erkennt, dass kein Spieler mit mehreren Sportartikelherstellern kooperiert. Jeder Spieler hat nur einen Ausstatter. Auffallend ist, das sowohl Nike als auch Adidas jeweils mit 11 der Spieler kooperieren. Nur einer der Spieler arbeitet nicht mit Nike oder Adidas zusammen, sondern mit Puma.
 
