@@ -95,12 +95,12 @@ E(soz)$color = "gray30"
 
 
 plot(soz, 
-     vertex.size=knotengroesse*6, # führt die relative Größe der Knoten aus
+     vertex.size=knotengroesse*8, # führt die relative Größe der Knoten aus
      layout=coords, # entzerrt das Netzwerk
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(soz)$weight, # legt die Kantenstärke fest
-     rescale=FALSE, ylim=c(-2,10), xlim=c(-3,18), asp = 0, # legt die Fenstergröße fest 
-     main="Teilnetzwerk Soziales Engagement") # Überschrift des Netzwerks
+     rescale=FALSE, ylim=c(-2,10), xlim=c(-3,12), asp = 0, # legt die Fenstergröße fest 
+     main="Teilnetzwerk soziales Engagement") # Überschrift des Netzwerks
 
 
 
@@ -151,7 +151,7 @@ plot(werb)
 
 
 # Das Teilnetzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
-coords <- layout_with_fr(werb)*0.9
+coords <- layout_with_fr(werb)*1.2
 
 # Festlegung der relativen Knotengröße
 # berechnet die Degree-Werte für alle Knoten und weist diese der Variable "knotengroesse" zu.
@@ -177,11 +177,11 @@ E(werb)$color = "gray30"
 
 
 plot(werb, 
-     vertex.size=knotengroesse*6, # führt die relative Größe der Knoten aus
+     vertex.size=knotengroesse*7, # führt die relative Größe der Knoten aus
      layout=coords, # entzerrt das Netzwerk
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(werb)$weight, # legt die Kantenstärke fest
-     rescale=FALSE, ylim=c(-5,10), xlim=c(-10,10), asp = 0, # legt die Fenstergröße fest 
+     rescale=FALSE, ylim=c(-9,16), xlim=c(-6.5,12), asp = 0, # legt die Fenstergröße fest 
      main="Teilnetzwerk Werbekooperationen") # Überschrift des Netzwerks
 
 # ---------------------------------------------------------
@@ -192,7 +192,7 @@ par(mfrow=c(1,2), mar=c(4,2,2,2))
 
 plot(soz, 
      layout = coords, 
-     main="Teilnetzwerk Soziales Engagement",
+     main="Teilnetzwerk soziales Engagement",
      vertex.size=knotengroesse*1, 
      vertex.frame.color="gray45", 
      vertex.label.family = "Helvetica", 
@@ -200,7 +200,7 @@ plot(soz,
      edge.color="gray30",
      edge.curved=0.2,
      edge.width=E(soz)$weight,
-     )
+)
 
 
 plot(werb, 
@@ -213,4 +213,4 @@ plot(werb,
      edge.color="gray30",
      edge.curved=0.2,
      edge.width=E(werb)$weight,
-     )
+)
