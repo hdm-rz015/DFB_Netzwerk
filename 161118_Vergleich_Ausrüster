@@ -1,6 +1,6 @@
 # VERGLEICH AUSRÜSTER
 # IGRAPH-OBJEKT
-
+ 
 library(igraph)
 el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/101118_Edgelist_einfach.csv", header=T, as.is=T, sep = ",")
 nodes <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/271018_Nodelist.csv", header=T, as.is=T, sep = ",")
@@ -106,8 +106,9 @@ ausstatter
 # Um nur die Beziehungen der Spieler zu den jeweiligen Ausrüstern zu visualisieren, wird nach dem Edge-Atrribut weight=4 selektiert.
 sport <- subgraph.edges(dfb, E(dfb)[weight == "4"])
 sport
+
 plot(sport, 
-     main="Vergleich Sportartikel-Ausstatter")
+     main="Vergleich der Ausruester")
 
 # Man erkennt, dass kein Spieler mit mehreren Sportartikelherstellern kooperiert. Jeder Spieler hat nur einen Ausstatter. 
 # Auffallend ist, dass sowohl Nike als auch Adidas jeweils mit 11 der Spieler kooperieren. Nur einer der Spieler arbeitet nicht mit Nike oder Adidas zusammen, sondern mit Puma.
