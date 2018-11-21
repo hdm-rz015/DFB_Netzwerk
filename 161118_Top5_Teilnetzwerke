@@ -113,10 +113,13 @@ degree(soz)
 # 6 weitere Spieler haben jeweils den Degree-Wert 3, daher ergibt sich im Teilnetzwerk soziales Engagement eine Top 7.
 
 V(soz)$degree <- degree(soz)
-soztop <- delete_vertices(soz, V(soz)[degree <= "2"]) 
-soztop
+soztop1 <- delete_vertices(soz, V(soz)[degree <= "2"]) 
+soztop1
 
-plot(soztop,
+soztop2 <- delete_vertices(soztop1, V(soztop1)[type == "3"]) 
+soztop2
+
+plot(soztop2,
      layout=layout_with_fr,
      vertex.frame.color="gray45", 
      vertex.label.family = "Helvetica", 
@@ -243,9 +246,9 @@ plot(werbtop,
 
 par(mfrow=c(1,2), mar=c(12,0,8,0))
 
-plot(soztop, 
+plot(soztop2, 
      layout=layout_with_fr,
-     main="Top 7 Soziales Engagement",
+     main="Top 7 soziales Engagement",
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(soztop)$weight, #legt die Kantenstärke fest
 )
