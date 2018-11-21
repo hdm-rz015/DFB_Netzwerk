@@ -126,7 +126,7 @@ is_connected(dfb)
 # Cluster im Netzwerk
 cluster_walktrap(dfb)
 cluster <- cluster_walktrap(dfb)
-plot(cluster, dfb)
+plot(cluster, dfb, main="Cluster Gesamtnetzwerk")
 
 # Cliquen im Netzwerk 
 cliques(dfb, min="1", max="4")
@@ -170,3 +170,4 @@ betweenness(dfb)
 
 # Edge-Betweenness
 edge_betweenness(dfb)
+
