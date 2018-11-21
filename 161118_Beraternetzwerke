@@ -132,7 +132,7 @@ plot(berater2[[1]],
 berater3 <- make_ego_graph(dfb_erw, order = 2, nodes = V(dfb_erw)$name == "fair_sport GmbH", mode = "all")
 berater3
 plot(berater3[[1]], 
-     main ="Spieler mit Berater 'fair_sport GmbH'")
+     main ="Spieler mit Berater 'fair-sport GmbH'")
 # Es fällt auf, dass beide Spieler denselben Ausrüster haben.
 # Es fällt auf, dass einer der Spieler kein soziales Engagement zeigt und beide Spieler auch nur wenige Werbekooperationen haben.
 
@@ -142,4 +142,3 @@ berater4
 plot(berater4[[1]],
      main ="Spieler mit Berater 'Karlheinz Foerster'")
 # Es fällt auf, dass beide Spieler nur einen Ausrüster haben, aber keine sonstigen Werbekooperationen.
-
