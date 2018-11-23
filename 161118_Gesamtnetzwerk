@@ -79,10 +79,11 @@ E(dfb)$color = "gray30"
 
 
 plot(dfb, 
-     vertex.size=knotengroesse*5.5, # führt die relative Größe der Knoten aus
+     vertex.size=knotengroesse*8, # führt die relative Größe der Knoten aus
      layout=coords, # entzerrt das Netzwerk
-     rescale=FALSE, ylim=c(-10,15),xlim=c(-15,25), asp = 0, # legt die Fenstergröße fest 
+     rescale=FALSE, ylim=c(-5,13),xlim=c(-12,18), asp = 0, # legt die Fenstergröße fest 
      edge.curved=0.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(dfb)$weight, # legt die Kantenstärke fest
      main="Gesamtnetzwerk DFB" # Überschrift des Netzwerks
 )
+
