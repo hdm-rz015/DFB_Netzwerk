@@ -74,7 +74,7 @@ V(dfb)$label.color = "gray20"
 
 # legt die Kantenfarbe fest
 edge.attributes(dfb)$edge.color
-E(dfb)$color = "gray30"
+E(dfb)$color = "gray60"
 
 # ---------------------------------------------------------
 
@@ -154,3 +154,4 @@ plot(MH[[1]],
      edge.curved=.2,
      edge.width=E(dfb)$weight,
 )
+
