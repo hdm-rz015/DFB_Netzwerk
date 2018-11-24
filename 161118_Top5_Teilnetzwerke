@@ -90,7 +90,7 @@ V(soz)$label.color = "gray20"
 
 # legt die Kantenfarbe fest
 edge.attributes(soz)$edge.color
-E(soz)$color = "gray30"
+E(soz)$color = "gray60"
 
 # ---------------------------------------------------------
 
@@ -124,7 +124,7 @@ plot(soztop2,
      vertex.frame.color="gray45", 
      vertex.label.family = "Helvetica", 
      vertex.label.color = "gray20", 
-     edge.color="gray30",
+     edge.color="gray60",
      edge.curved=.2,
      main="Top 7 soziales Engagement",
 )
@@ -203,7 +203,7 @@ V(werb)$label.color = "gray20"
 
 # legt die Kantenfarbe fest
 edge.attributes(werb)$edge.color
-E(werb)$color = "gray30"
+E(werb)$color = "gray60"
 
 # ---------------------------------------------------------
 
@@ -234,7 +234,7 @@ plot(werbtop,
      vertex.frame.color="gray45", 
      vertex.label.family = "Helvetica", 
      vertex.label.color = "gray20", 
-     edge.color="gray30",
+     edge.color="gray60",
      edge.curved=.2,
      main="Top 5 Werbekooperationen",
 )
@@ -250,7 +250,7 @@ plot(soztop2,
      layout=layout_with_fr,
      main="Top 7 soziales Engagement",
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
-     edge.width=E(soztop)$weight, #legt die Kantenstärke fest
+     edge.width=E(soztop2)$weight, #legt die Kantenstärke fest
 )
 
 
