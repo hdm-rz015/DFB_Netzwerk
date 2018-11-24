@@ -52,7 +52,7 @@ plot(dfb)
 
 
 # Das Netzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
-coords <- layout_with_fr(dfb)*1.2
+coords <- layout_with_fr(dfb)*1.3
 
 # Festlegung der relativen Knotengröße
 # berechnet die Degree-Werte für alle Knoten und weist diese der Variable "knotengroesse" zu.
@@ -61,6 +61,7 @@ knotengroesse
 
 # bestimmt die farbliche Umrandung der Knoten
 vertex.attributes(dfb)$frame.color
+
 V(dfb)$frame.color = "gray45"
 
 # legt die Schrift der Knotenbezeichnungen fest 
@@ -73,7 +74,7 @@ V(dfb)$label.color = "gray20"
 
 # legt die Kantenfarbe fest
 edge.attributes(dfb)$edge.color
-E(dfb)$color = "gray30"
+E(dfb)$color = "gray60"
 
 # ---------------------------------------------------------
 
@@ -81,7 +82,7 @@ E(dfb)$color = "gray30"
 plot(dfb, 
      vertex.size=knotengroesse*8, # führt die relative Größe der Knoten aus
      layout=coords, # entzerrt das Netzwerk
-     rescale=FALSE, ylim=c(-5,13),xlim=c(-12,18), asp = 0, # legt die Fenstergröße fest 
+     rescale=FALSE, ylim=c(-7,12),xlim=c(-15,19), asp = 0, # legt die Fenstergröße fest 
      edge.curved=0.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(dfb)$weight, # legt die Kantenstärke fest
      main="Gesamtnetzwerk DFB" # Überschrift des Netzwerks
@@ -97,7 +98,7 @@ V(dfb)$label <- NA
 plot(dfb, 
      vertex.size=knotengroesse*8, # führt die relative Größe der Knoten aus
      layout=coords, # entzerrt das Netzwerk
-     rescale=FALSE, ylim=c(-5,13),xlim=c(-12,15), asp = 0, # legt die Fenstergröße fest 
+     rescale=FALSE, ylim=c(-8,13),xlim=c(-14,17), asp = 0, # legt die Fenstergröße fest 
      edge.curved=0.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(dfb)$weight, # legt die Kantenstärke fest
      main="Gesamtnetzwerk DFB" # Überschrift des Netzwerks
