@@ -90,7 +90,7 @@ V(soz)$label.color = "gray20"
 
 # legt die Kantenfarbe fest
 edge.attributes(soz)$edge.color
-E(soz)$color = "gray30"
+E(soz)$color = "gray60"
 
 
 
@@ -99,7 +99,7 @@ plot(soz,
      layout=coords, # entzerrt das Netzwerk
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(soz)$weight, # legt die Kantenstärke fest
-     rescale=FALSE, ylim=c(-2,10), xlim=c(-3,12), asp = 0, # legt die Fenstergröße fest 
+     rescale=FALSE, ylim=c(-2,10), xlim=c(-3,10.5), asp = 0, # legt die Fenstergröße fest 
      main="Teilnetzwerk soziales Engagement") # Überschrift des Netzwerks
 
 
@@ -151,7 +151,7 @@ plot(werb)
 
 
 # Das Teilnetzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
-coords <- layout_with_fr(werb)*1.2
+coords <- layout_with_fr(werb)*1.3
 
 # Festlegung der relativen Knotengröße
 # berechnet die Degree-Werte für alle Knoten und weist diese der Variable "knotengroesse" zu.
@@ -172,7 +172,7 @@ V(werb)$label.color = "gray20"
 
 # legt die Kantenfarbe fest
 edge.attributes(werb)$edge.color
-E(werb)$color = "gray30"
+E(werb)$color = "gray60"
 
 
 
@@ -181,7 +181,7 @@ plot(werb,
      layout=coords, # entzerrt das Netzwerk
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(werb)$weight, # legt die Kantenstärke fest
-     rescale=FALSE, ylim=c(-9,16), xlim=c(-6.5,12), asp = 0, # legt die Fenstergröße fest 
+     rescale=FALSE, ylim=c(-8,18), xlim=c(-8,15), asp = 0, # legt die Fenstergröße fest 
      main="Teilnetzwerk Werbekooperationen") # Überschrift des Netzwerks
 
 # ---------------------------------------------------------
@@ -197,7 +197,7 @@ plot(soz,
      vertex.frame.color="gray45", 
      vertex.label.family = "Helvetica", 
      vertex.label.color = "gray20", 
-     edge.color="gray30",
+     edge.color="gray60",
      edge.curved=0.2,
      edge.width=E(soz)$weight,
 )
@@ -210,7 +210,7 @@ plot(werb,
      vertex.frame.color="gray45", 
      vertex.label.family = "Helvetica", 
      vertex.label.color = "gray20", 
-     edge.color="gray30",
+     edge.color="gray60",
      edge.curved=0.2,
      edge.width=E(werb)$weight,
 )
