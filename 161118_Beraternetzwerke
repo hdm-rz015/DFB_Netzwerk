@@ -72,7 +72,7 @@ V(dfb_erw)$label.color = "gray20"
 
 # legt die Kantenfarbe fest
 edge.attributes(dfb_erw)$edge.color
-E(dfb_erw)$color = "gray30"
+E(dfb_erw)$color = "gray60"
 
 # ---------------------------------------------------------
 
