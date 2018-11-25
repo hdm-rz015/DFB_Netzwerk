@@ -90,7 +90,7 @@ V(soz)$label.color = "gray20"
 
 # legt die Kantenfarbe fest
 edge.attributes(soz)$edge.color
-E(soz)$color = "gray30"
+E(soz)$color = "gray60"
 
 
 
@@ -254,7 +254,7 @@ V(werb)$label.color = "gray20"
 
 # legt die Kantenfarbe fest
 edge.attributes(werb)$edge.color
-E(werb)$color = "gray30"
+E(werb)$color = "gray60"
 
 
 
