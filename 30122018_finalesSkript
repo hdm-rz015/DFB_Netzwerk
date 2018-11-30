@@ -1,4 +1,4 @@
-#WERBEKOOPERATIONEN UND SOZIALES ENGAGEMENT DES DFB-KADERS 2018
+# WERBEKOOPERATIONEN UND SOZIALES ENGAGEMENT DES WM-KADERS 2018
 
 # GESAMTNETZWERK DFB
 
@@ -31,7 +31,7 @@ vertex.attributes(dfb)$type
 # Färbung der Knoten
 # Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
 # Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
-# Da das Attribut $type nur drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
+# Da das Attribut $type drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
 faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
 
 # Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
@@ -63,7 +63,6 @@ knotengroesse
 
 # bestimmt die farbliche Umrandung der Knoten
 vertex.attributes(dfb)$frame.color
-
 V(dfb)$frame.color = "gray45"
 
 # legt die Schrift der Knotenbezeichnungen fest 
@@ -91,7 +90,6 @@ plot(dfb,
 )
 
 
-# ---------------------------------------------------------
 
 # Visualisierung ohne Labels
 
@@ -106,6 +104,8 @@ plot(dfb,
      main="Gesamtnetzwerk DFB" # Überschrift des Netzwerks
 )
 
+# ---------------------------------------------------------
+
 # ANALYSIERUNG DER NETZWERKDATEN IM GESAMTNETZWERK DFB
 
 
@@ -119,7 +119,7 @@ vcount(dfb)
 ecount(dfb)
 # Anzahl der edges: 120
 
-# Dichte des Netzwerks (Anzahl der realisierten Beziehungen zwischen Knoten im Verhältnis zu allen möglichen Verbindungen)
+# Dichte des Netzwerks (Anzahl der realisierten Beziehungen zwischen den Knoten im Verhältnis zu allen möglichen Verbindungen)
 edge_density(dfb)
 # Die Dichte des Netzwerks beträgt 2,33%.
 # Das heißt, es wurden von allen möglichen Beziehungen zwischen den Knoten nur 2,33% realisiert.
@@ -134,11 +134,11 @@ farthest_vertices(dfb)
 
 # Durchschnittliche Pfaddistanz
 mean_distance(dfb)
-# Die durchschnittliche Pfaddistanz beträgt 4.19
+# Die durchschnittliche Pfaddistanz beträgt 4.19.
 
 # Ist es ein ganzes Netzwerk oder gibt es Teile (Komponenten)?
 is_connected(dfb)
-# TRUE: Das Netzwerk dfb ist ein ganzes Netzwerk 
+# TRUE: Das Netzwerk dfb ist ein ganzes Netzwerk. 
 
 # Cluster im Netzwerk
 cluster_walktrap(dfb)
@@ -209,7 +209,7 @@ dfb <- graph_from_data_frame(d=hties, vertices=nodes, directed=F)
 dfb
 plot(dfb)
 
-#----------------------------------------------------------------------------------------------
+# ---------------------------------------------------------
 
 # SELEKTION VON ZWEI TEILNETZWERKEN
 # Das Teilnetzwerk soziales Engagement (soz) wird mit dem Teilnetzwerk Werbekooperationen (werb) verglichen. 
@@ -219,7 +219,7 @@ edge.attributes(dfb)
 edge.attributes(dfb)$relationship
 # das Edge-Attribut relationship ist in "1" (soziales Engagement) und "2" (Werbekooperationen) kodiert.
 
-#-----------------------------------------------------------------------------------------------
+# ---------------------------------------------------------
 
 # TEILNETZWERK SOZIALES ENGAGEMENT
 
@@ -274,7 +274,7 @@ knotengroesse
 vertex.attributes(soz)$frame.color
 V(soz)$frame.color = "gray45"
 
-# legt die Schrift der Knotenbezeichnungen fest 
+# legt die Schrift der Knotenbezeichnungen fest
 vertex.attributes(soz)$label.family
 V(soz)$label.family = "Helvetica"
 
@@ -296,9 +296,9 @@ plot(soz,
      rescale=FALSE, ylim=c(-2,10), xlim=c(-3,10.5), asp = 0, # legt die Fenstergröße fest 
      main="Teilnetzwerk soziales Engagement") # Überschrift des Netzwerks
 
+# ---------------------------------------------------------
 
 # ANALYSIERUNG DER NETZWERKDATEN IM TEILNETZWERK SOZ
-
 
 # NETZWERKMAßE
 
@@ -317,7 +317,7 @@ edge_density(soz)
 
 # Der Durchmesser des Netzwerks (maximal mögliche Pfaddistanz)
 diameter(soz)
-# Die maximale Pfaddistanz beträgt 19
+# Die maximale Pfaddistanz beträgt 19.
 
 # Welche Knoten sind von der maximalen Pfaddistanz betroffen? 
 farthest_vertices(soz)
@@ -325,11 +325,11 @@ farthest_vertices(soz)
 
 # Durchschnittliche Pfaddistanz
 mean_distance(soz)
-# Die durchschnittliche Pfaddistanz beträgt 3.52
+# Die durchschnittliche Pfaddistanz beträgt 3.52.
 
 # Ist es ein ganzes Netzwerk oder gibt es Teile (Komponenten)?
 is_connected(soz)
-# False: Das Netzwerk soz ist kein ganzes Netzwerk 
+# False: Das Netzwerk soz ist kein ganzes Netzwerk. 
 
 # Cluster im Netzwerk
 cluster_walktrap(soz)
@@ -341,7 +341,7 @@ cliques(soz, min="1", max="4")
 
 # Die „largest Clique“ beinhaltet die meisten Knoten 
 largest_cliques(soz)
-# Die "largest Clique" besteht aus 2 Knoten
+# Die "largest Clique" besteht aus 2 Knoten.
 
 components(soz)
 count_components(soz)
@@ -354,7 +354,7 @@ degree(soz)
 
 # Der Degree-Wert wird normalisiert. Alle Werte werden auf prozentuale Werte zwischen 0 und 1 umgerechnet.
 degree(soz, mode="all", normalized=TRUE)
-# Die Degree-Werte von Thomas Mueller und United-Charity entsprechen jeweils 11,32%
+# Die Degree-Werte von Thomas Mueller und United-Charity entsprechen jeweils 11,32%.
 
 # zentralisierter Degree-Wert
 centr_degree(soz)$centralization
@@ -379,7 +379,7 @@ edge_betweenness(soz)
 
 
 
-# ------------------------------------------------------------------------------------------
+# ---------------------------------------------------------
 
 # TEILNETZWERK WERBEKOOPERATIONEN
 
@@ -456,8 +456,9 @@ plot(werb,
      rescale=FALSE, ylim=c(-8,18), xlim=c(-8,15), asp = 0, # legt die Fenstergröße fest 
      main="Teilnetzwerk Werbekooperationen") # Überschrift des Netzwerks
 
-# ANALYSIERUNG DER NETZWERKDATEN IM TEILNETZWERK WERB
+# ---------------------------------------------------------
 
+# ANALYSIERUNG DER NETZWERKDATEN IM TEILNETZWERK WERB
 
 # NETZWERKMAßE
 
@@ -566,7 +567,11 @@ plot(werb,
      edge.width=E(werb)$weight,
 )
 
-# DIE 5 SPIELER MIT DEM HÖCHSTEN DEGREE-WERT IM TEILNETZWERK SOZIALES ENGAGEMENT
+# ---------------------------------------------------------
+
+
+# TOP 7 SOZIALES ENGAGEMENT
+# DIE SPIELER MIT DEM HÖCHSTEN DEGREE-WERT IM TEILNETZWERK SOZIALES ENGAGEMENT
 
 degree(soz)
 
@@ -593,11 +598,11 @@ plot(soztop2,
      main="Top 7 soziales Engagement",
 )
 
-# interessant: 5 der 7 Spieler mit dem höchsten sozialen Engagement engagieren sich für United Charity
 
 # ---------------------------------------------------------
 
-# DIE 5 SPIELER MIT DEM HÖCHSTEN DEGREE-WERT IM TEILNETZWERK WERBEKOOPERATIONEN
+# TOP 5 WERBEKOOPERATIONEN
+# DIE SPIELER MIT DEM HÖCHSTEN DEGREE-WERT IM TEILNETZWERK WERBEKOOPERATIONEN
 
 degree(werb)
 
@@ -643,12 +648,8 @@ plot(werbtop,
 
 
 
-# INTERESSANT: Marco Reus, Thomas Müller und Jerome Boateng kommen in beiden Top-Netzwerken vor
-# so haben 3 von 5 Spielern mit den meisten Werbekooperationen auch das meiste sozialen Engagement
-# Thomas Mueller ist in beiden Netzwerken auf Platz 1
-
 # ---------------------------------------------------------
-
+# ---------------------------------------------------------
 # ---------------------------------------------------------
 
 # EGO-NETZWERKE
@@ -665,7 +666,7 @@ vertex.attributes(dfb)$type
 # Färbung der Knoten
 # Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
 # Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
-# Da das Attribut $type nur drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
+# Da das Attribut $type drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
 faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
 
 # Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
@@ -796,7 +797,7 @@ plot(MH[[1]],
 # ---------------------------------------------------------
 # ---------------------------------------------------------
 
-# VERGLEICH DER AUSRUESTER
+# VERGLEICH DER AUSRUESTER NIKE, ADIDAS UND PUMA
 
 # Zuordnung der Vertex-Attribute
 name <- V(dfb)$akteursbezeichnung
@@ -826,12 +827,12 @@ par(mfrow=c(1,1), mar=c(2,2,4,2))
 plot(sport, 
      main="Vergleich der Ausruester")
 
-# Man erkennt, dass kein Spieler mit mehreren Sportartikelherstellern kooperiert. Jeder Spieler hat nur einen Ausstatter. 
-# Auffallend ist, dass sowohl Nike als auch Adidas jeweils mit 11 der Spieler kooperieren. Nur einer der Spieler arbeitet nicht mit Nike oder Adidas zusammen, sondern mit Puma.
 
 # ---------------------------------------------------------
+# ---------------------------------------------------------
+# ---------------------------------------------------------
 
-# GESAMTNETZWERK dfb_erw 
+# GESAMTNETZWERK DFB_ERW ZUR UNTERSUCHUNG DER BERATER
 
 # IGRAPH-OBJEKT
 
@@ -848,22 +849,21 @@ dfb_erw
 plot(dfb_erw)
 
 # ---------------------------------------------------------
-# GESAMTNETZWERK
+# GESAMTNETZWERK DFB_ERW
 
 # Die Beschriftung der Knoten (Label) entspricht dem Attribut "Akteursbezeichnungen". 
 V(dfb_erw)$label <- V(dfb_erw)$akteursbezeichnung
 
-#VISUALISIERUNG DES GESAMTNETZWERKS
+# VISUALISIERUNG DES GESAMTNETZWERKS
 
 # Im Netzwerk werden die Spieler selbst, ihre Werbekooperationen und ihr soziales Engagement dargestellt.
-# Das Vertex-Attribut $type definiert mit "1" die Spieler, mit "2" die Werbekooperationen und mit "3" das soziale Engagement.
+# Das Vertex-Attribut $type definiert mit "1" die Spieler, mit "2" die Werbekooperationen, mit "3" das soziale Engagement und mit "4" die Berater der Spieler.
 vertex.attributes(dfb_erw)$type
-
 
 # Färbung der Knoten
 # Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
 # Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
-# Da das Attribut $type nur drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
+# Da das Attribut $type nun vier Werte hat (Spieler, Werbekooperationen, soziales Engagement, Berater), werden vier unterschiedliche Farben benötigt.
 faerbung <- c("chartreuse2", "honeydew3", "springgreen4", "gold")
 
 # Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
@@ -915,7 +915,7 @@ plot(dfb_erw,
      rescale=FALSE, ylim=c(-15,25),xlim=c(-22,27), asp = 0, # legt die Fenstergröße fest nach x- und y-Varianten
      edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
      edge.width=E(dfb_erw)$weight, #legt die Kantenstärke fest
-     main="erweitertes Gesamtnetzwerk des DFB mit Beratern"
+     main="Erweitertes Gesamtnetzwerk des WM-Kaders mit Beratern"
 )
 
 #------------------------------------------------
@@ -942,7 +942,7 @@ type
 ausstatter
 
 
-#Selektion nach den einzelnen Beratern
+# Selektion nach den einzelnen Beratern
 # Um die Teilnetzwerke der Berater zu visualisieren, werden verschiedene Ego-Netzwerke erstellt. 
 # Durch den Befehl order=2 sieht man nicht nur die jeweiligen Spieler des Beraters sondern auch die Werbekooperationen und das soziale Engagement der Spieler.
 
@@ -951,7 +951,6 @@ berater1 <- make_ego_graph(dfb_erw, order = 2, nodes = V(dfb_erw)$name == "Famil
 berater1
 plot(berater1[[1]],
      main ="Spieler mit Berater 'Family and Football'")
-# Es fällt auf, dass es viele Parallelen bei den beiden Spielern gibt. Beide haben den Ausrüster Adidas und beide haben verhältnismäßig gleich viele Werbekooperationen wie soziales Engagement.
 
 
 # BERATER 2: SportsTotal
@@ -959,19 +958,17 @@ berater2 <- make_ego_graph(dfb_erw, order = 2, nodes = V(dfb_erw)$name == "Sport
 berater2
 plot(berater2[[1]],
      main ="Spieler mit Berater 'SportsTotal'")
-# Es fällt auf, dass beide Spieler generell überdurchschnittlich viele Kanten haben, sowohl Werbekooperationen als auch soziales Engagement.
+
 
 # BERATER 3: fair_sport GmbH
 berater3 <- make_ego_graph(dfb_erw, order = 2, nodes = V(dfb_erw)$name == "fair_sport GmbH", mode = "all")
 berater3
 plot(berater3[[1]], 
      main ="Spieler mit Berater 'fair-sport GmbH'")
-# Es fällt auf, dass beide Spieler denselben Ausrüster haben.
-# Es fällt auf, dass einer der Spieler kein soziales Engagement zeigt und beide Spieler auch nur wenige Werbekooperationen haben.
+
 
 # BERATER 4:  Karlheinz Foerster
 berater4 <- make_ego_graph(dfb_erw, order = 2, nodes = V(dfb_erw)$name == "Karlheinz_Foerster", mode = "all")
 berater4
 plot(berater4[[1]],
      main ="Spieler mit Berater 'Karlheinz Foerster'")
-# Es fällt auf, dass beide Spieler nur einen Ausrüster haben, aber keine sonstigen Werbekooperationen.
