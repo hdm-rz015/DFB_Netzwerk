@@ -1,0 +1,977 @@
+#WERBEKOOPERATIONEN UND SOZIALES ENGAGEMENT DES DFB-KADERS 2018
+
+# GESAMTNETZWERK DFB
+
+# IGRAPH-OBJEKT
+
+library(igraph)
+
+el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/101118_Edgelist_einfach.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/271018_Nodelist.csv", header=T, as.is=T, sep = ",")
+
+head(el)
+head(nodes)
+
+hties <-as.matrix(el)
+dfb <- graph_from_data_frame(d=hties, vertices=nodes, directed=F)
+dfb
+plot(dfb)
+
+# ---------------------------------------------------------
+
+# VISUALISIERUNG DES GESAMTNETZWERKS
+
+# Die Beschriftung der Knoten (Label) entspricht dem Attribut "Akteursbezeichnungen".
+V(dfb)$label <- V(dfb)$akteursbezeichnung
+
+# Im Netzwerk werden die Spieler selbst, ihre Werbekooperationen und ihr soziales Engagement dargestellt.
+# Das Vertex-Attribut $type definiert mit "1" die Spieler, mit "2" die Werbekooperationen und mit "3" das soziale Engagement.
+vertex.attributes(dfb)$type
+
+# Färbung der Knoten
+# Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
+# Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
+# Da das Attribut $type nur drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
+faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
+
+# Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
+V(dfb)$color <- faerbung[V(dfb)$type]
+
+# Form der Akteure bestimmen
+# definiert, dass alle Knoten als square auftreten.
+V(dfb)$shape = "square"
+
+# wählt alle Knoten aus, die das Vertex-Attribut "1" bei $type gesetzt haben.
+spieler <- V(dfb)[type == "1"]
+spieler
+
+# weist allen Werten von "spieler" den shape "cirle" zu.
+V(dfb)[spieler]$shape = "circle"
+
+plot(dfb)
+
+
+
+
+# Das Netzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
+coords <- layout_with_fr(dfb)*1.3
+
+# Festlegung der relativen Knotengröße
+# berechnet die Degree-Werte für alle Knoten und weist diese der Variable "knotengroesse" zu.
+knotengroesse <- degree(dfb)
+knotengroesse
+
+# bestimmt die farbliche Umrandung der Knoten
+vertex.attributes(dfb)$frame.color
+
+V(dfb)$frame.color = "gray45"
+
+# legt die Schrift der Knotenbezeichnungen fest 
+vertex.attributes(dfb)$label.family
+V(dfb)$label.family = "Helvetica"
+
+# legt die Schriftfarbe der Knotenbezeichnungen fest
+vertex.attributes(dfb)$label.color
+V(dfb)$label.color = "gray20"
+
+# legt die Kantenfarbe fest
+edge.attributes(dfb)$edge.color
+E(dfb)$color = "gray60"
+
+# ---------------------------------------------------------
+
+
+plot(dfb, 
+     vertex.size=knotengroesse*8, # führt die relative Größe der Knoten aus
+     layout=coords, # entzerrt das Netzwerk
+     rescale=FALSE, ylim=c(-7,12),xlim=c(-15,19), asp = 0, # legt die Fenstergröße fest 
+     edge.curved=0.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(dfb)$weight, # legt die Kantenstärke fest
+     main="Gesamtnetzwerk DFB" # Überschrift des Netzwerks
+)
+
+
+# ---------------------------------------------------------
+
+# Visualisierung ohne Labels
+
+V(dfb)$label <- NA
+
+plot(dfb, 
+     vertex.size=knotengroesse*8, # führt die relative Größe der Knoten aus
+     layout=coords, # entzerrt das Netzwerk
+     rescale=FALSE, ylim=c(-8,13),xlim=c(-14,17), asp = 0, # legt die Fenstergröße fest 
+     edge.curved=0.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(dfb)$weight, # legt die Kantenstärke fest
+     main="Gesamtnetzwerk DFB" # Überschrift des Netzwerks
+)
+
+# ANALYSIERUNG DER NETZWERKDATEN IM GESAMTNETZWERK DFB
+
+
+# NETZWERKMAßE
+
+# Wie viele Knoten gibt es?
+vcount(dfb)
+# Anzahl der vertices: 102
+
+# Wie viele Kanten gibt es?
+ecount(dfb)
+# Anzahl der edges: 120
+
+# Dichte des Netzwerks (Anzahl der realisierten Beziehungen zwischen Knoten im Verhältnis zu allen möglichen Verbindungen)
+edge_density(dfb)
+# Die Dichte des Netzwerks beträgt 2,33%.
+# Das heißt, es wurden von allen möglichen Beziehungen zwischen den Knoten nur 2,33% realisiert.
+
+# Der Durchmesser des Netzwerks (maximal mögliche Pfaddistanz)
+diameter(dfb)
+# Die maximale Pfaddistanz beträgt 24.
+
+# Welche Knoten sind von der maximalen Pfaddistanz betroffen? 
+farthest_vertices(dfb)
+# Mit den Knoten "Jugendhilfe Jona" und der "Matthias Ginter Stiftung" können wir sozusagen die maximale Pfaddistanz laufen.
+
+# Durchschnittliche Pfaddistanz
+mean_distance(dfb)
+# Die durchschnittliche Pfaddistanz beträgt 4.19
+
+# Ist es ein ganzes Netzwerk oder gibt es Teile (Komponenten)?
+is_connected(dfb)
+# TRUE: Das Netzwerk dfb ist ein ganzes Netzwerk 
+
+# Cluster im Netzwerk
+cluster_walktrap(dfb)
+cluster <- cluster_walktrap(dfb)
+plot(cluster, dfb, main="Cluster Gesamtnetzwerk")
+
+# Cliquen im Netzwerk 
+cliques(dfb, min="1", max="4")
+
+# Die „largest Clique“ beinhaltet die meisten Knoten 
+largest_cliques(dfb)
+# Die "largest Clique" besteht aus 2 Knoten
+
+
+
+
+# AKTEURSMAßE
+
+# Wer ist am stärksten im Netzwerk vernetzt? (allgemeiner Degree-Wert)
+degree(dfb)
+# Thomas Mueller ist der Akteur, der am stärksten im Netzwerk vernetzt ist. Er hat 15 degrees.
+
+# Der Degree-Wert wird normalisiert. Alle Werte werden auf prozentuale Werte zwischen 0 und 1 umgerechnet.
+degree(dfb, mode="all", normalized=TRUE)
+# Der Degree-Wert von Thomas Mueller entspricht 14,84%
+
+# zentralisierter Degree-Wert
+centr_degree(dfb)$centralization
+# 0.1252184
+
+# zentralisierter Closeness-Wert
+centr_clo(dfb)$centralization
+# 0.2238287
+
+# zentralisierter Betweenness-Wert
+centr_betw(dfb)$centralization
+# 0.397172
+
+# zentralisierter Eigenvector-Wert
+centr_eigen(dfb)$centralization
+# 0.8592874
+
+# Betweenness (Maß für die Brokerage von Knoten im Netzwerk)
+betweenness(dfb)
+# Mats Hummels hat den höchsten Betweenness-Wert: 1384.7
+
+# Edge-Betweenness
+edge_betweenness(dfb)
+
+# ---------------------------------------------------------
+# ---------------------------------------------------------
+# ---------------------------------------------------------
+
+# TEILNETZWERKE WERBEKOOPERATIONEN UND SOZIALES ENGAGEMENT UND DIE TOP 5/ TOP 7
+
+# IGRAPH-OBJEKT GESAMTNETZWERK DFB
+
+library(igraph)
+
+el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/101118_Edgelist_einfach.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/271018_Nodelist.csv", header=T, as.is=T, sep = ",")
+
+head(el)
+head(nodes)
+
+hties <-as.matrix(el)
+dfb <- graph_from_data_frame(d=hties, vertices=nodes, directed=F)
+dfb
+plot(dfb)
+
+#----------------------------------------------------------------------------------------------
+
+# SELEKTION VON ZWEI TEILNETZWERKEN
+# Das Teilnetzwerk soziales Engagement (soz) wird mit dem Teilnetzwerk Werbekooperationen (werb) verglichen. 
+
+# Selektion in Teilnetzwerk soz und werb
+edge.attributes(dfb)
+edge.attributes(dfb)$relationship
+# das Edge-Attribut relationship ist in "1" (soziales Engagement) und "2" (Werbekooperationen) kodiert.
+
+#-----------------------------------------------------------------------------------------------
+
+# TEILNETZWERK SOZIALES ENGAGEMENT
+
+soz <- subgraph.edges(dfb, E(dfb)[relationship == 1])
+soz
+edge.attributes(soz)$relationship
+
+# Visualisierung des Teilnetzwerks soz
+
+# Die Beschriftung der Knoten (Label) entspricht dem Attribut "Akteursbezeichnungen".
+V(soz)$label <- V(soz)$akteursbezeichnung
+
+# Färbung der Knoten
+# Im Teilnetzwerk werden die Spieler und ihr soziales Engagement dargestellt.
+# Das Vertex-Attribut $type definiert mit "1" die Spieler und mit "3" das soziale Engagement.
+vertex.attributes(soz)$type
+
+# Färbung der Knoten
+# Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
+# Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
+# Da das Attribut $type drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
+faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
+
+# Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
+V(soz)$color <- faerbung[V(soz)$type]
+
+# Form der Akteure bestimmen
+# definiert, dass alle Knoten als square auftreten.
+V(soz)$shape = "square"
+
+# wählt alle Knoten aus, die das Vertex-Attribut "1" bei $type gesetzt haben.
+spieler <- V(soz)[type == "1"]
+spieler
+
+# weist allen Werten von "spieler" den shape "cirle" zu.
+V(soz)[spieler]$shape = "circle"
+
+plot(soz)
+
+
+
+
+# Das Teilnetzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
+coords <- layout_with_fr(soz)*1
+
+# Festlegung der relativen Knotengröße
+# berechnet die Degree-Werte für alle Knoten und weist diese der Variable "knotengroesse" zu.
+knotengroesse <- degree(soz)
+knotengroesse
+
+# bestimmt die farbliche Umrandung der Knoten
+vertex.attributes(soz)$frame.color
+V(soz)$frame.color = "gray45"
+
+# legt die Schrift der Knotenbezeichnungen fest 
+vertex.attributes(soz)$label.family
+V(soz)$label.family = "Helvetica"
+
+# legt die Schriftfarbe der Knotenbezeichnungen fest
+vertex.attributes(soz)$label.color
+V(soz)$label.color = "gray20"
+
+# legt die Kantenfarbe fest
+edge.attributes(soz)$edge.color
+E(soz)$color = "gray60"
+
+
+
+plot(soz, 
+     vertex.size=knotengroesse*8, # führt die relative Größe der Knoten aus
+     layout=coords, # entzerrt das Netzwerk
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(soz)$weight, # legt die Kantenstärke fest
+     rescale=FALSE, ylim=c(-2,10), xlim=c(-3,10.5), asp = 0, # legt die Fenstergröße fest 
+     main="Teilnetzwerk soziales Engagement") # Überschrift des Netzwerks
+
+
+# ANALYSIERUNG DER NETZWERKDATEN IM TEILNETZWERK SOZ
+
+
+# NETZWERKMAßE
+
+# Wie viele Knoten gibt es?
+vcount(soz)
+# Anzahl der vertices: 54
+
+# Wie viele Kanten gibt es?
+ecount(soz)
+# Anzahl der edges: 43
+
+# Dichte des Netzwerks (Anzahl der realisierten Beziehungen zwischen Knoten im Verhältnis zu allen möglichen Verbindungen)
+edge_density(soz)
+# Die Dichte des Netzwerks beträgt 3,00%.
+# Das heißt, es wurden von allen möglichen Beziehungen zwischen den Knoten nur 3,00% realisiert.
+
+# Der Durchmesser des Netzwerks (maximal mögliche Pfaddistanz)
+diameter(soz)
+# Die maximale Pfaddistanz beträgt 19
+
+# Welche Knoten sind von der maximalen Pfaddistanz betroffen? 
+farthest_vertices(soz)
+# Mit den Knoten "Living a dream" und der "Toni Kroos Stiftung" können wir sozusagen die maximale Pfaddistanz laufen.
+
+# Durchschnittliche Pfaddistanz
+mean_distance(soz)
+# Die durchschnittliche Pfaddistanz beträgt 3.52
+
+# Ist es ein ganzes Netzwerk oder gibt es Teile (Komponenten)?
+is_connected(soz)
+# False: Das Netzwerk soz ist kein ganzes Netzwerk 
+
+# Cluster im Netzwerk
+cluster_walktrap(soz)
+cluster <- cluster_walktrap(soz)
+plot(cluster, soz, main="Cluster Teilnetzwerk soziales Engagement")
+
+# Cliquen im Netzwerk 
+cliques(soz, min="1", max="4")
+
+# Die „largest Clique“ beinhaltet die meisten Knoten 
+largest_cliques(soz)
+# Die "largest Clique" besteht aus 2 Knoten
+
+components(soz)
+count_components(soz)
+
+# AKTEURSMAßE
+
+# Wer ist am stärksten im Netzwerk vernetzt? (allgemeiner Degree-Wert)
+degree(soz)
+# Thomas Mueller und United Charity sind die Akteure, die am stärksten im Netzwerk vernetzt sind. Sie haben 6 degrees.
+
+# Der Degree-Wert wird normalisiert. Alle Werte werden auf prozentuale Werte zwischen 0 und 1 umgerechnet.
+degree(soz, mode="all", normalized=TRUE)
+# Die Degree-Werte von Thomas Mueller und United-Charity entsprechen jeweils 11,32%
+
+# zentralisierter Degree-Wert
+centr_degree(soz)$centralization
+# 0.08315863
+
+# zentralisierter Betweenness-Wert
+centr_betw(soz)$centralization
+# 0.1858997
+
+# zentralisierter Eigenvector-Wert
+centr_eigen(soz)$centralization
+# 0.9020352
+
+# Betweenness (Maß für die Brokerage von Knoten im Netzwerk)
+betweenness(soz)
+# United-Charity hat den höchsten Betweenness-Wert: 269
+
+# Edge-Betweennes
+edge_betweenness(soz)
+
+
+
+
+
+# ------------------------------------------------------------------------------------------
+
+# TEILNETZWERK WERBEKOOPERATIONEN
+
+werb <- subgraph.edges(dfb, E(dfb)[relationship == 2])
+werb
+edge.attributes(werb)$relationship
+
+# Visualisierung des Teilnetzwerks werb
+
+# Die Beschriftung der Knoten (Label) entspricht dem Attribut "Akteursbezeichnungen".
+V(werb)$label <- V(werb)$akteursbezeichnung
+
+# Färbung der Knoten
+# Im Teilnetzwerk werden die Spieler und ihre Werbekooperationen dargestellt.
+# Das Vertex-Attribut $type definiert mit "1" die Spieler und mit "2" die Werbekooperationen.
+vertex.attributes(werb)$type
+
+# Färbung der Knoten
+# Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
+# Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
+# Da das Attribut $type drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
+faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
+
+# Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
+V(werb)$color <- faerbung[V(werb)$type]
+
+# Form der Akteure bestimmen
+# definiert, dass alle Knoten als square auftreten.
+V(werb)$shape = "square"
+
+# wählt alle Knoten aus, die das Vertex-Attribut "1" bei $type gesetzt haben.
+spieler <- V(werb)[type == "1"]
+spieler
+
+# weist allen Werten von "spieler" den shape "cirle" zu.
+V(werb)[spieler]$shape = "circle"
+
+plot(werb)
+
+
+
+
+# Das Teilnetzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
+coords <- layout_with_fr(werb)*1.3
+
+# Festlegung der relativen Knotengröße
+# berechnet die Degree-Werte für alle Knoten und weist diese der Variable "knotengroesse" zu.
+knotengroesse <- degree(werb)
+knotengroesse
+
+# bestimmt die farbliche Umrandung der Knoten
+vertex.attributes(werb)$frame.color
+V(werb)$frame.color = "gray45"
+
+# legt die Schrift der Knotenbezeichnungen fest 
+vertex.attributes(werb)$label.family
+V(werb)$label.family = "Helvetica"
+
+# legt die Schriftfarbe der Knotenbezeichnungen fest
+vertex.attributes(werb)$label.color
+V(werb)$label.color = "gray20"
+
+# legt die Kantenfarbe fest
+edge.attributes(werb)$edge.color
+E(werb)$color = "gray60"
+
+
+
+plot(werb, 
+     vertex.size=knotengroesse*7, # führt die relative Größe der Knoten aus
+     layout=coords, # entzerrt das Netzwerk
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(werb)$weight, # legt die Kantenstärke fest
+     rescale=FALSE, ylim=c(-8,18), xlim=c(-8,15), asp = 0, # legt die Fenstergröße fest 
+     main="Teilnetzwerk Werbekooperationen") # Überschrift des Netzwerks
+
+# ANALYSIERUNG DER NETZWERKDATEN IM TEILNETZWERK WERB
+
+
+# NETZWERKMAßE
+
+# Wie viele Knoten gibt es?
+vcount(werb)
+# Anzahl der vertices: 68
+
+# Wie viele Kanten gibt es?
+ecount(werb)
+# Anzahl der edges: 77
+
+# Dichte des Netzwerks (Anzahl der realisierten Beziehungen zwischen Knoten im Verhältnis zu allen möglichen Verbindungen)
+edge_density(werb)
+# Die Dichte des Netzwerks beträgt 3,38%.
+# Das heißt, es wurden von allen möglichen Beziehungen zwischen den Knoten nur 3,38% realisiert.
+
+# Der Durchmesser des Netzwerks (maximal mögliche Pfaddistanz)
+diameter(werb)
+# Die maximale Pfaddistanz beträgt 22
+
+# Welche Knoten sind von der maximalen Pfaddistanz betroffen? 
+farthest_vertices(werb)
+# Mit den Knoten "Barilla" und "Jamie Jacobs" können wir sozusagen die maximale Pfaddistanz laufen.
+
+# Durchschnittliche Pfaddistanz
+mean_distance(werb)
+# Die durchschnittliche Pfaddistanz beträgt 4.18
+
+# Ist es ein ganzes Netzwerk oder gibt es Teile (Komponenten)?
+is_connected(werb)
+# TRUE: Das Netzwerk werb ist ein ganzes Netzwerk 
+
+# Cluster im Netzwerk
+cluster_walktrap(werb)
+cluster <- cluster_walktrap(werb)
+plot(cluster, werb, main="Cluster Teilnetzwerk Werbekooperationen")
+
+# Cliquen im Netzwerk 
+cliques(werb, min="1", max="4")
+
+# Die „largest Clique“ beinhaltet die meisten Knoten 
+largest_cliques(werb)
+# Die "largest Clique" besteht aus 2 Knoten
+
+components(werb)
+count_components(werb)
+
+
+# AKTEURSMAßE
+
+# Wer ist am stärksten im Netzwerk vernetzt? (allgemeiner Degree-Wert)
+degree(werb)
+# Adidas und Nike sind die Akteure, die am stärksten im Netzwerk vernetzt sind. Sie haben 11 degrees.
+
+# Der Degree-Wert wird normalisiert. Alle Werte werden auf prozentuale Werte zwischen 0 und 1 umgerechnet.
+degree(werb, mode="all", normalized=TRUE)
+# Die Degree-Werte von Adidas und Nike entsprechen jeweils 16,42%
+
+# zentralisierter Degree-Wert
+centr_degree(werb)$centralization
+# 0.1303775
+
+# zentralisierter Betweenness-Wert
+centr_betw(werb)$centralization
+# 0.4891469
+
+# zentralisierter Eigenvector-Wert
+centr_eigen(werb)$centralization
+# 0.8618002
+
+# Betweenness (Maß für die Brokerage von Knoten im Netzwerk)
+betweenness(werb)
+# Mats Hummels hat den höchsten Betweenness-Wert: 923.5
+
+# Edge-Betweennes
+edge_betweenness(werb)
+
+# ---------------------------------------------------------
+
+# DIREKTER VERGLEICH DER BEIDEN TEILNETZWERKE SOZ UND WERB
+
+par(mfrow=c(1,2), mar=c(4,2,2,2))
+
+plot(soz, 
+     layout = coords, 
+     main="Teilnetzwerk soziales Engagement",
+     vertex.size=knotengroesse*1, 
+     vertex.frame.color="gray45", 
+     vertex.label.family = "Helvetica", 
+     vertex.label.color = "gray20", 
+     edge.color="gray60",
+     edge.curved=0.2,
+     edge.width=E(soz)$weight,
+)
+
+
+plot(werb, 
+     layout = coords, 
+     main="Teilnetzwerk Werbekooperationen",
+     vertex.size=knotengroesse*1, 
+     vertex.frame.color="gray45", 
+     vertex.label.family = "Helvetica", 
+     vertex.label.color = "gray20", 
+     edge.color="gray60",
+     edge.curved=0.2,
+     edge.width=E(werb)$weight,
+)
+
+# DIE 5 SPIELER MIT DEM HÖCHSTEN DEGREE-WERT IM TEILNETZWERK SOZIALES ENGAGEMENT
+
+degree(soz)
+
+# die Spieler mit dem höchsten Degree-Werten lassen sich aus der Liste ablesen
+# Thomas Müller hat die meisten Degrees, nämlich 6.
+# 6 weitere Spieler haben jeweils den Degree-Wert 3, daher ergibt sich im Teilnetzwerk soziales Engagement eine Top 7.
+
+V(soz)$degree <- degree(soz)
+soztop1 <- delete_vertices(soz, V(soz)[degree <= "2"]) 
+soztop1
+
+soztop2 <- delete_vertices(soztop1, V(soztop1)[type == "3"]) 
+soztop2
+
+par(mfrow=c(1,1), mar=c(4,2,2,2))
+
+plot(soztop2,
+     layout=layout_with_fr,
+     vertex.frame.color="gray45", 
+     vertex.label.family = "Helvetica", 
+     vertex.label.color = "gray20", 
+     edge.color="gray60",
+     edge.curved=.2,
+     main="Top 7 soziales Engagement",
+)
+
+# interessant: 5 der 7 Spieler mit dem höchsten sozialen Engagement engagieren sich für United Charity
+
+# ---------------------------------------------------------
+
+# DIE 5 SPIELER MIT DEM HÖCHSTEN DEGREE-WERT IM TEILNETZWERK WERBEKOOPERATIONEN
+
+degree(werb)
+
+# die Spieler mit dem höchsten Degree-Werten lassen sich aus der Liste ablesen
+# Manuel Neuer, Mats Hummels und Thomas Müller haben die meisten Degrees, nämlich 9.
+# 2 weitere Spieler haben den Degree-Wert 5 und 6. Somit erhalten wir eine Top 5 im Teilnetzwerk Werbekooperationen. 
+
+V(werb)$degree <- degree(werb)
+werbtop <- delete_vertices(werb, V(werb)[degree <= "4"]) 
+werbtop
+
+plot(werbtop,
+     layout=layout_with_fr,
+     vertex.frame.color="gray45", 
+     vertex.label.family = "Helvetica", 
+     vertex.label.color = "gray20", 
+     edge.color="gray60",
+     edge.curved=.2,
+     main="Top 5 Werbekooperationen",
+)
+
+# ---------------------------------------------------------
+
+# VERGLEICH DER TEILNETZWERKE TOP 7 SOZIALES ENGAGEMENT UND TOP 5 WERBEKOOPERATIONEN
+
+
+par(mfrow=c(1,2), mar=c(12,0,8,0))
+
+plot(soztop2, 
+     layout=layout_with_fr,
+     main="Top 7 soziales Engagement",
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(soztop2)$weight, #legt die Kantenstärke fest
+)
+
+
+plot(werbtop, 
+     layout=layout_with_fr,
+     main="Top 5 Werbekooperationen",
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(werbtop)$weight, #legt die Kantenstärke fest
+)
+
+
+
+# INTERESSANT: Marco Reus, Thomas Müller und Jerome Boateng kommen in beiden Top-Netzwerken vor
+# so haben 3 von 5 Spielern mit den meisten Werbekooperationen auch das meiste sozialen Engagement
+# Thomas Mueller ist in beiden Netzwerken auf Platz 1
+
+# ---------------------------------------------------------
+
+# ---------------------------------------------------------
+
+# EGO-NETZWERKE
+
+# VISUALISIERUNG DES GESAMTNETZWERKS DFB
+
+# Die Beschriftung der Knoten (Label) entspricht dem Attribut "Akteursbezeichnungen".
+V(dfb)$label <- V(dfb)$akteursbezeichnung
+
+# Im Netzwerk werden die Spieler selbst, ihre Werbekooperationen und ihr soziales Engagement dargestellt.
+# Das Vertex-Attribut $type definiert mit "1" die Spieler, mit "2" die Werbekooperationen und mit "3" das soziale Engagement.
+vertex.attributes(dfb)$type
+
+# Färbung der Knoten
+# Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
+# Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
+# Da das Attribut $type nur drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
+faerbung <- c("chartreuse2", "honeydew3", "springgreen4")
+
+# Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
+V(dfb)$color <- faerbung[V(dfb)$type]
+
+# Form der Akteure bestimmen
+# definiert, dass alle Knoten als square auftreten.
+V(dfb)$shape = "square"
+
+# wählt alle Knoten aus, die das Vertex-Attribut "1" bei $type gesetzt haben.
+spieler <- V(dfb)[type == "1"]
+spieler
+
+# weist allen Werten von "spieler" den shape "cirle" zu.
+V(dfb)[spieler]$shape = "circle"
+
+par(mfrow=c(1,1), mar=c(12,0,8,0))
+plot(dfb)
+
+
+
+
+# Das Netzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
+coords <- layout_with_fr(dfb)*1.2
+
+# Festlegung der relativen Knotengröße
+# berechnet die Degree-Werte für alle Knoten und weist diese der Variable "knotengroesse" zu.
+knotengroesse <- degree(dfb)
+knotengroesse
+
+# bestimmt die farbliche Umrandung der Knoten
+vertex.attributes(dfb)$frame.color
+V(dfb)$frame.color = "gray45"
+
+# legt die Schrift der Knotenbezeichnungen fest 
+vertex.attributes(dfb)$label.family
+V(dfb)$label.family = "Helvetica"
+
+# legt die Schriftfarbe der Knotenbezeichnungen fest
+vertex.attributes(dfb)$label.color
+V(dfb)$label.color = "gray20"
+
+# legt die Kantenfarbe fest
+edge.attributes(dfb)$edge.color
+E(dfb)$color = "gray60"
+
+# ---------------------------------------------------------
+
+
+plot(dfb, 
+     vertex.size=knotengroesse*5.5, # führt die relative Größe der Knoten aus
+     layout=coords, # entzerrt das Netzwerk
+     rescale=FALSE, ylim=c(-10,15),xlim=c(-15,25), asp = 0, # legt die Fenstergröße fest 
+     edge.curved=0.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(dfb)$weight, # legt die Kantenstärke fest
+     main="Gesamtnetzwerk DFB" # Überschrift des Netzwerks
+)
+
+# ---------------------------------------------------------
+
+# EGO-NETZWERKE
+
+# Welche zwei Spieler sind am stärksten im Netzwerk vernetzt?
+# Der allgemeine Degree-Wert wird berechnet.
+
+degree(dfb)
+
+# Thomas Müller ist der Spieler, der am stärksten im Netzwerk vernetzt ist. Wie aus der Liste abzulesen, hat er 15 degrees. 
+# Mats Hummels ist der Spieler, der am zweitstärksten im Netzwerk vernetzt ist. Wie aus der Liste abzulesen, hat er 11 degrees. 
+# Erstellung der Ego-Netzwerke von Thomas Müller und Mats Hummels. 
+
+# ---------------------------------------------------------
+
+# THOMAS MÜLLER
+
+ego(dfb, order = 1, nodes = V(dfb)$akteursbezeichnung == "Thomas Mueller", mode = "all")
+#selektiert das Ego-Netzwerk von Thomas Mueller.
+
+TM <- make_ego_graph(dfb, order = 1, nodes = V(dfb)$akteursbezeichnung == "Thomas Mueller", mode = "all")
+TM
+
+plot(TM[[1]], 
+     main="Ego-Netzwerk Thomas Mueller",
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(dfb)$weight, #legt die Kantenstärke fest
+)
+
+
+#----------------------------------------------------------------------
+
+# MATS HUMMELS
+
+ego(dfb, order = 1, nodes = V(dfb)$akteursbezeichnung == "Mats Hummels", mode = "all")
+#selektiert das Ego-Netzwerk von Mats Hummels. 
+
+MH <- make_ego_graph(dfb, order = 1, nodes = V(dfb)$akteursbezeichnung == "Mats Hummels", mode = "all")
+MH
+
+plot(MH[[1]], 
+     main="Ego-Netzwerk Mats Hummels",
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(dfb)$weight, #legt die Kantenstärke fest
+)
+
+
+#---------------------------------------------------------------------------
+
+# DIREKTER VERGLEICH DER EGO-NETZWERKE TM UND MH
+
+par(mfrow=c(1,2), mar=c(2,2,4,2))
+
+plot(TM[[1]], 
+     layout = layout_with_fr, 
+     main="Ego-Netzwerk Thomas Mueller",
+     edge.curved=.2,
+     edge.width=E(dfb)$weight,
+)
+
+plot(MH[[1]], 
+     layout = layout_with_fr, 
+     main="Ego-Netzwerk Mats Hummels",
+     edge.curved=.2,
+     edge.width=E(dfb)$weight,
+)
+
+
+# ---------------------------------------------------------
+# ---------------------------------------------------------
+# ---------------------------------------------------------
+
+# VERGLEICH DER AUSRUESTER
+
+# Zuordnung der Vertex-Attribute
+name <- V(dfb)$akteursbezeichnung
+follower <- V(dfb)$follower
+marktwert <- V(dfb)$marktwert
+alter <- V(dfb)$alter
+berater <- V(dfb)$berater
+nationalitaet <- V(dfb)$nationalitaet
+type <- V(dfb)$type
+ausstatter <- V(dfb)$ausstatter
+
+name 
+marktwert
+follower
+alter
+berater
+nationalitaet
+type
+ausstatter
+
+# Um nur die Beziehungen der Spieler zu den jeweiligen Ausrüstern zu visualisieren, wird nach dem Edge-Atrribut weight=4 selektiert.
+sport <- subgraph.edges(dfb, E(dfb)[weight == "4"])
+sport
+
+par(mfrow=c(1,1), mar=c(2,2,4,2))
+
+plot(sport, 
+     main="Vergleich der Ausruester")
+
+# Man erkennt, dass kein Spieler mit mehreren Sportartikelherstellern kooperiert. Jeder Spieler hat nur einen Ausstatter. 
+# Auffallend ist, dass sowohl Nike als auch Adidas jeweils mit 11 der Spieler kooperieren. Nur einer der Spieler arbeitet nicht mit Nike oder Adidas zusammen, sondern mit Puma.
+
+# ---------------------------------------------------------
+
+# GESAMTNETZWERK dfb_erw 
+
+# IGRAPH-OBJEKT
+
+library(igraph)
+el <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/101118_Edgelist_erweitert.csv", header=T, as.is=T, sep = ",")
+nodes <- read.csv("https://raw.githubusercontent.com/hdm-rz015/DFB_Netzwerk/master/101118_Nodelist_erweitert.csv", header=T, as.is=T, sep = ",")
+
+head(el)
+head(nodes)
+
+hties <-as.matrix(el)
+dfb_erw <- graph_from_data_frame(d=hties, vertices=nodes, directed=F)
+dfb_erw
+plot(dfb_erw)
+
+# ---------------------------------------------------------
+# GESAMTNETZWERK
+
+# Die Beschriftung der Knoten (Label) entspricht dem Attribut "Akteursbezeichnungen". 
+V(dfb_erw)$label <- V(dfb_erw)$akteursbezeichnung
+
+#VISUALISIERUNG DES GESAMTNETZWERKS
+
+# Im Netzwerk werden die Spieler selbst, ihre Werbekooperationen und ihr soziales Engagement dargestellt.
+# Das Vertex-Attribut $type definiert mit "1" die Spieler, mit "2" die Werbekooperationen und mit "3" das soziale Engagement.
+vertex.attributes(dfb_erw)$type
+
+
+# Färbung der Knoten
+# Die Akteure werden abhängig von dem Attribut $type verschieden eingefärbt.
+# Das Farbspektrum wird definiert und mit dem neuen Vector faerbung festgelegt.
+# Da das Attribut $type nur drei Werte hat (Spieler, Werbekooperationen, soziales Engagement), werden drei unterschiedliche Farben benötigt.
+faerbung <- c("chartreuse2", "honeydew3", "springgreen4", "gold")
+
+# Das Vertex-Attribut color wird definiert und die Funktion "faerbung" ihm zugewiesen.
+V(dfb_erw)$color <- faerbung[V(dfb_erw)$type]
+
+# Form der Akteure anpassen
+# definiert, dass alle Knoten als square auftreten.
+V(dfb_erw)$shape = "square"
+
+# wählt alle Knoten aus, die das Vertex-Attribut "1" bei type gesetzt haben.
+spieler <- V(dfb_erw)[type == "1"]
+spieler
+
+# weist allen Werten von spieler den Shape "cirle" zu.
+V(dfb_erw)[spieler]$shape = "circle"
+
+plot(dfb_erw)
+
+# Das Netzwerk wird mit der Variable coords entzerrt und mit dem Fruchterman-Rheingold Algorithmus visualisiert.
+coords <- layout_with_fr(dfb_erw)*1.8
+
+
+# Festlegung der relativen Knotengröße
+# berechnet den Degree-Wert für alle Knoten und weist ihm die Variable "knotengroesse" zu.
+knotengroesse <- degree(dfb_erw)
+knotengroesse
+
+# bestimmt die farbliche Umrandung der Knoten
+vertex.attributes(dfb_erw)$frame.color
+V(dfb_erw)$frame.color = "gray45"
+
+# legt die Schrift der Knotenbezeichnungen fest 
+vertex.attributes(dfb_erw)$label.family
+V(dfb_erw)$label.family = "Helvetica"
+
+# legt die Schriftfarbe der Knotenbezeichnungen fest
+vertex.attributes(dfb_erw)$label.color
+V(dfb_erw)$label.color = "gray20"
+
+# legt die Kantenfarbe fest
+edge.attributes(dfb_erw)$edge.color
+E(dfb_erw)$color = "gray60"
+
+# ---------------------------------------------------------
+
+plot(dfb_erw, 
+     vertex.size=knotengroesse*15, # führt die relative Größe der Knoten aus
+     layout=coords, # entzerrt das Netzwerk
+     rescale=FALSE, ylim=c(-15,25),xlim=c(-22,27), asp = 0, # legt die Fenstergröße fest nach x- und y-Varianten
+     edge.curved=.2, # bestimmt den Krümmungsgrad der Kanten
+     edge.width=E(dfb_erw)$weight, #legt die Kantenstärke fest
+     main="erweitertes Gesamtnetzwerk des DFB mit Beratern"
+)
+
+#------------------------------------------------
+
+# BERATER-TEILNETZWERKE ERSTELLEN
+
+#Zuordnung der Vertex-Attribute
+name <- V(dfb_erw)$akteursbezeichnung
+follower <- V(dfb_erw)$follower
+marktwert <- V(dfb_erw)$marktwert
+alter <- V(dfb_erw)$alter
+berater <- V(dfb_erw)$berater
+nationalitaet <- V(dfb_erw)$nationalitaet
+type <- V(dfb_erw)$type
+ausstatter <- V(dfb_erw)$ausstatter
+
+name 
+marktwert
+follower
+alter
+berater
+nationalitaet
+type
+ausstatter
+
+
+#Selektion nach den einzelnen Beratern
+# Um die Teilnetzwerke der Berater zu visualisieren, werden verschiedene Ego-Netzwerke erstellt. 
+# Durch den Befehl order=2 sieht man nicht nur die jeweiligen Spieler des Beraters sondern auch die Werbekooperationen und das soziale Engagement der Spieler.
+
+#BERATER 1: Family and Football
+berater1 <- make_ego_graph(dfb_erw, order = 2, nodes = V(dfb_erw)$name == "Family_and_Football", mode = "all")
+berater1
+plot(berater1[[1]],
+     main ="Spieler mit Berater 'Family and Football'")
+# Es fällt auf, dass es viele Parallelen bei den beiden Spielern gibt. Beide haben den Ausrüster Adidas und beide haben verhältnismäßig gleich viele Werbekooperationen wie soziales Engagement.
+
+
+# BERATER 2: SportsTotal
+berater2 <- make_ego_graph(dfb_erw, order = 2, nodes = V(dfb_erw)$name == "SportsTotal_Berater", mode = "all")
+berater2
+plot(berater2[[1]],
+     main ="Spieler mit Berater 'SportsTotal'")
+# Es fällt auf, dass beide Spieler generell überdurchschnittlich viele Kanten haben, sowohl Werbekooperationen als auch soziales Engagement.
+
+# BERATER 3: fair_sport GmbH
+berater3 <- make_ego_graph(dfb_erw, order = 2, nodes = V(dfb_erw)$name == "fair_sport GmbH", mode = "all")
+berater3
+plot(berater3[[1]], 
+     main ="Spieler mit Berater 'fair-sport GmbH'")
+# Es fällt auf, dass beide Spieler denselben Ausrüster haben.
+# Es fällt auf, dass einer der Spieler kein soziales Engagement zeigt und beide Spieler auch nur wenige Werbekooperationen haben.
+
+# BERATER 4:  Karlheinz Foerster
+berater4 <- make_ego_graph(dfb_erw, order = 2, nodes = V(dfb_erw)$name == "Karlheinz_Foerster", mode = "all")
+berater4
+plot(berater4[[1]],
+     main ="Spieler mit Berater 'Karlheinz Foerster'")
+# Es fällt auf, dass beide Spieler nur einen Ausrüster haben, aber keine sonstigen Werbekooperationen.
